@@ -29,7 +29,7 @@ const StockProduct = ({name, id, category, count, code, pozice, images, AddToSto
       <div className='FullStockProduct flex'>
         <div className='ProductStockName flex'>
           { images && images.length > 0 && (
-    <img src={require('../Images/' + images[0].url.slice(27))} alt="" />
+    <img src={require('../Images/' + images[0].url.slice(23))} alt="" />
   )}
           <span>{name}</span>
         </div>
