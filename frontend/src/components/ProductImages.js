@@ -72,7 +72,7 @@ const ProductImages = ({productId}) => {
         images.map((image, index) => {
         return (
           <div>
-            <img src={require('../Images/' + image.url.slice(27))} alt="" />
+            <img src={require('../Images/' + image.url.slice(23))} alt="" />
           </div>
         )
         })}
