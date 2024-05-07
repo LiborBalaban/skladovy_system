@@ -47,7 +47,7 @@ const Product = ({name, id, category, quantity, code, pozice, images, reload, po
         <div className='ProductName flex'>
         {
   images && images.length > 0 && (
-    <img src={require('../Images/' + images[0].url.slice(23))} alt="" />
+    <img src={require('../Images/' + images[0].url.slice(22))} alt="" />
   )
 }
         <span>{name}</span>

@@ -6,10 +6,9 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: function(req, file, cb){
-        cb(null, "skladovy_system/src/Images"); // Umístění, kam se uloží obrázky
+        cb(null, "../frontend/src/Images");
     },
     filename: (req, file, cb) => {
-        // Náhodné jméno s původní příponou
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
