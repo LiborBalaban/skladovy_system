@@ -27,6 +27,167 @@ button:hover{
   cursor: pointer;
 }
 
+/*COMPONENTS*/
+
+/*BUTTON*/
+.button{
+  width: 150px;
+  height: 50px;
+  color: var(--colorWhite);
+  background-color: var(--colorBlue);
+  border: none;
+  font-weight: 700;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.addButton{
+  background-color: var(--colorBlue);
+}
+
+.deleteButton{
+  background-color: var(--colorRed);
+}
+
+.button:hover{
+  transform: 0.3s;
+  background-color: var(--colorBlack);
+}
+/*LIST OF DATA*/
+.list{
+  height: 70%;
+  gap: 10px;
+  width: 100%;
+  flex-direction: column;
+}
+/*INPUT*/
+.input-flex{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 80%;
+  align-items: start;
+  justify-content: start;
+}
+
+.input-flex label{
+  color: var(--colorBlue);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.input-flex input{
+  width: 100%;
+  height: 40px;
+  padding-left: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: 1px solid var(--colorDarkGray);
+}
+
+.input-flex select{
+  width: 100%;
+  height: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: 1px solid var(--colorDarkGray);
+}
+
+
+.input-flex textarea{
+  width: 100%;
+  height: 130px;
+  padding-left: 15px;
+  padding-top: 15px;
+  border: none;
+  border-radius: 5px;
+  outline: 1px solid var(--colorDarkGray);
+}
+
+/*ITEM*/
+.item{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background-color: var(--colorWhite);
+  box-shadow: 8px 8px 10px rgba(0,0,0,0.05);
+  padding: 15px;
+  justify-content: space-between;
+  border-radius: 5px;
+}
+
+.item h2{
+  color: var(--colorBlue);
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.item_icons{
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.item_icons img{
+  filter: invert(50%);
+  height: 30px;
+}
+
+/*PAGE*/
+.page{
+  width: 100%;
+  height: 100%;
+}
+
+.page-header{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+}
+
+.page-items{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  height: 70%;
+  gap: 10px;
+  width: 100%;
+  flex-direction: column;
+}
+
+/*FORM*/
+.form{
+  width: 100%;
+  background-color: var(--colorWhite);
+  border-radius: 10px;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 0px;
+
+}
+.form-container{
+  width: 100%;
+  gap: 25px;
+  padding: 25px;
+  align-items: start;
+}
+.form-block{
+  flex: 1;
+  background-color: var(--colorWhite);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 /*LoginPage*/
 .LoginPage{
   width: 100%;
@@ -35,10 +196,9 @@ button:hover{
   justify-content: center;
 }
 .loading{
-  height: 50px;
-  width: 50px;
+  height: 60px;
+  width: 60px;
   border-radius: 50%;
-  border-left: 3px solid var(--colorBlue);
   border-bottom: 3px solid var(--colorBlue);
   border-top: 3px solid var(--colorBlue);
   animation: spin 1s linear infinite;
@@ -508,10 +668,11 @@ align-items: center;
 }
 
 .AddProductPage{
-  gap: 50px;  
+  gap: 20px;  
   align-items: start;
   padding: 30px;
   width: 100%;
+ 
 }
 
 .AddStoragePage h2{
@@ -779,7 +940,6 @@ align-items: center;
 /*Storage page*/
 .Storages{
   width: 100%;
-  height: 100%;
   align-items: start;
   gap: 20px;
   flex-wrap: wrap;

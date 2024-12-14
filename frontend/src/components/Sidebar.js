@@ -14,10 +14,12 @@ import Supplier from '../Images/parcel.png';
 import Categories from '../Images/categories.png';
 import Products from '../Images/package.png';
 import Employess from '../Images/man.png';
+import { useUser } from '../context/UserContext';
 
 function Sidebar() {
   const history = useNavigate();
   const [warehouses, setWarehouses] = useState([]);
+  const { role } = useUser();
   
   useEffect(() => {
     loadStorages();
@@ -51,15 +53,15 @@ function Sidebar() {
   };
 
   const storageClick = () => {
-    history('/fullapp/storages');
+    history('/admin/storages');
   };
 
   const supplierClick = () => {
-    history('/fullapp/suppliers');
+    history('/admin/suppliers');
   }
 
   const employeeClick = () =>{
-    history('/fullapp/employee');
+    history('/admin/employee');
   }
 
   const stockClick = () =>{
@@ -85,18 +87,32 @@ function Sidebar() {
         </div>
         <ul>
           
-          
-          
             <li><span onClick={productClick}><img src={Products} alt="" className = "asideIcon" />Produkty</span></li>
             <li><span onClick={orderClick}><img src={checkout} alt="" className = "asideIcon" />Objednávky</span></li>
-            <li><span  onClick={storageClick}><img src={home} alt="" className = "asideIcon" />Sklad</span></li>
+            {
+            role === 3 && (
+              <li><span  onClick={storageClick}><img src={home} alt="" className = "asideIcon" />Sklad</span></li>
+            )
+            }
             <li><span href="" onClick={positionClick}><img src={Location} alt="" className = "asideIcon" />Pozice skladů</span></li>
             <li><span href="" onClick={stockClick}><img src={Import} alt="" className = "asideIcon" />Příjemka</span></li>
             <li><span href="" onClick={historyStockOutClick}><img src={Export} alt="" className = "asideIcon" />Výdejka</span></li>
             <li><span href="" onClick={historymovementsClick}><img src={historyImg} alt="" className = "asideIcon" />Historie pohybů</span></li>
-            <li><span href="" onClick={categoryClick}><img src={Categories} alt="" className = "asideIcon" />Kategorie</span></li>
-            <li><span href="" onClick={supplierClick}><img src={Supplier} alt="" className = "asideIcon" />Dodavatelé</span></li>
-            <li><span href="" onClick={employeeClick}><img src={Employess} alt="" className = "asideIcon" />Zaměstnanci</span></li>
+            {
+              role === 3 && (
+                <li><span href="" onClick={categoryClick}><img src={Categories} alt="" className = "asideIcon" />Kategorie</span></li>
+              )
+            }
+            {
+              role === 3 && (
+                <li><span href="" onClick={supplierClick}><img src={Supplier} alt="" className = "asideIcon" />Dodavatelé</span></li>
+              )
+            }
+            {
+              role ===3 && (
+                <li><span href="" onClick={employeeClick}><img src={Employess} alt="" className = "asideIcon" />Zaměstnanci</span></li>
+              )
+            }
         </ul>
       </aside>
 

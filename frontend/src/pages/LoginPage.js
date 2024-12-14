@@ -1,72 +1,26 @@
 import '../App.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'universal-cookie';
-import axios from 'axios';
+import { useUser } from '../context/UserContext';
+import LoginForm from '../components/forms/LoginForm';
+import { postData } from '../hooks/addToDb';
+import useCustomNavigate from '../hooks/navigate';
+
 const LoginPage =()=> {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); 
-  const history = useNavigate();
+
+const { goTo } = useCustomNavigate();
+const { loginUser } = useUser(); 
+
+
+const handleLogin = async(formData) => {
+        const result = await postData('http://localhost:5000/login-user', formData);
+        loginUser(result);
+        goTo('/fullapp');
+      };
+
+
   
-  function isValidEmail(email) {
-    const regex = /\S+@\S+\.\S+/;
-    const isValid = regex.test(email);
-    return isValid;
-  }
-  
-  const check =()=>{
-    if(email === ""){
-      alert('Nemáte vyplněný email nebo vám zde chybí @');
-    }
-
-    if(password === "" || password.length < 5 ){
-      alert('Nemáte správně vyplněné heslo');
-    }
-
-    const isValid = isValidEmail(email);
-    if (!isValid) {
-      alert('Nemáte správně zadaný email');
-    }
-
-    else{
-      login();
-    }
-
-  }
-  
-
-  const login = async () => {
-    try {
-      const response = await axios.post('http://localhost:5000/login-user', {
-        email:email, password:password
-      });
-      const token = response.data.token;
-      document.cookie = `token=${token}; path=/; Secure; SameSite=Strict`;
-      checkTokenAndRedirect();
-  
-    } catch (error) {
-      console.error('There was an error!', error);
-      alert("Zadali jste špatný email nebo heslo");
-    }
-  };
-  
-
-  const checkTokenAndRedirect = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/get-checktoken", { withCredentials: true });
-      const isAuthenticated = response.data.message;
-      
-      if (isAuthenticated === 'You are authenticated') {
-        history("/fullapp");
-      } else {
-        history("/login");
-      }
-    } catch (error) {
-      console.error("Error checking authentication:", error);
-    }
-  };
-
-
+/*
   const resetPassword = async () => {
     try {
       if (email === "") {
@@ -81,23 +35,14 @@ const LoginPage =()=> {
     } catch (error) {
       console.error('There was an error!', error);
     }
-  };
+  };*/
 
   
   return (
     <div className="LoginPage flex">
         <div className='LoginDiv flex'>
             <h2>Přihlašte se</h2>
-            <div className='LoginForm flex'>
-                <input type="text" placeholder='Email' value={email} onInput={(e) => {
-                  setEmail(e.target.value);
-                }}/>
-                <input type="password" placeholder='Heslo' value={password} onInput={(e) => {
-                  setPassword(e.target.value);
-                }}/>
-                <span onClick={resetPassword}>Zapomněli jste heslo?</span>
-                <input type="submit" value={"Přihlásit se"} onClick={check}/>
-            </div>
+            <LoginForm onSubmit={handleLogin}/>
         </div>
     </div>
   );

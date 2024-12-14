@@ -7,12 +7,12 @@ import OrderPage from './OrderPage';
 import CategoryPage from './CategoryPage';
 import AddCategoryPage from './AddCategoryPage';
 import StoragePage from './StoragePage';
-import UpdateStoragePage from './UpdateStoragePage';
+import UpdateStoragePage from './StorageDetailPage';
 import AddProductPage from './AddProductPage';
 import SupplierPage from './SupplierPage';
 import AddSupplierPage from './AddSupplierPage';
 import EmployeePage from './EmployeePage';
-import AddEmployee from './AddEmployee';
+import AddEmployeePage from './AddEmployee';
 import StockPage from './StockPage';
 import PositionPage from './PositionPage';
 import MovementsPage from './MovementsPage';
@@ -30,15 +30,8 @@ const FullApp = () => {
           <Route path='/category' element={<CategoryPage />} />
           <Route path='/addcategory' element={<AddCategoryPage />} />
           <Route path='/addcategory/:id' element={<AddCategoryPage />} />
-          <Route path="/storages" element={<StoragePage />} />
-          <Route path='/update-storage/:id' element={<UpdateStoragePage />} />
           <Route path='/add-product' element={<AddProductPage />} />
           <Route path='/add-product/:id' element={<AddProductPage />} />
-          <Route path='/suppliers' element={<SupplierPage />} />
-          <Route path='/add-supplier' element={<AddSupplierPage />} />
-          <Route path='/add-supplier/:id' element={<AddSupplierPage />} />
-          <Route path='/employee' element={<EmployeePage />} />
-          <Route path='/addemployee' element={<AddEmployee />} />
           <Route path='/stock' element={<StockPage />} />
           <Route path='/positions' element={<PositionPage />} />
           <Route path='/movements' element={<MovementsPage />} />

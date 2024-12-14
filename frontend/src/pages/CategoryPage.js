@@ -1,45 +1,32 @@
 import '../App.css';
-import Category from '../components/Category';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
+import Button from '../components/button';
+import Item from '../components/item';
+import useData from '../hooks/loadData';
+import useCustomNavigate from '../hooks/navigate';
+
 function CategoryPage() {
-  const history = useNavigate();
-  const [categories, setCategories] = useState([]);
-  const handleClick = () => {
-    history('/fullapp/addcategory');
-  };
 
- useEffect(()=>{
-  loadCategories();
- }, [])
+  const { goTo } = useCustomNavigate();
   
+  const { data:categories, loading, error } = useData('http://localhost:5000/get-categories'); 
+
+  if (loading) return <p>Načítám kategorie...</p>;
+  if (error) return <p>{error}</p>;
  
-  const loadCategories = async () =>{
-    try {
-      const response = await axios.get("http://localhost:5000/get-categories", { withCredentials: true });
-      const categories = response.data.categories;
-      setCategories(categories);
-      
-    } catch{
-      console.error("Chyba při získávání dodavatelů");
-    }
-  }
-
-  
-
   return (
-    <div className="CategoryPage">
-        <div className='CategoryPageHeader'>
+    <div className="page">
+        <div className='page-header'>
         <h2>Kategorie</h2>
-       <button className='addButton' onClick={handleClick}>Přidat</button>
+        <Button label = 'Přidat' onClick={() => goTo('/fullapp/addcategory')} style={'button addButton'} type={('button')}/>
         </div>
-        <div className='Categories flex'>
+        <div className='page-items'>
         {
           categories.map((category, index) =>{
             return(
-            <Category key = {index} name = {category.name} id = {category._id} reload = {loadCategories}/>
+            <Item key = {index} name = {category.name} link = {`/fullapp/addcategory/${category.id}`}/>
             )
           })
         }

@@ -5,14 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import Cookies from 'universal-cookie';
+import { useUser } from '../context/UserContext';
 
 const Navbar =()=> {
   const history = useNavigate();
   const [email, setEmail] = useState("");
   const cookies = new Cookies();
- 
   
-useEffect(() => {
+
+  const { role } = useUser();
+  useEffect(() => {
   loadEmail();
 }, []);
 
@@ -58,6 +60,7 @@ const menu = () =>{
   indexMenu = 0;
   }
 }
+
   
   return (
    
@@ -75,6 +78,7 @@ const menu = () =>{
         </ul>
         </div>
         <div className = "flex navAcc" >
+          <span>{role}</span>
             <span>{email.charAt(0).toLocaleUpperCase()}</span>
             <p>{email}</p>
             <img src={logoutIcon} alt="" onClick={logout}/>

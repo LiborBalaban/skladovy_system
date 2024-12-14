@@ -46,10 +46,10 @@ const Product = ({name, id, category, quantity, code, pozice, images, reload, po
         <div onClick={navigateLink} className='ProductContainer flex'>
         <div className='ProductName flex'>
         {
-  images && images.length > 0 && (
-    <img src={require('../Images/' + images[0].url.slice(23))} alt="" />
-  )
-}
+          images && images.length > 0 && (
+            <img src={require('../Images/' + images[0].url.slice(23))} alt="" />
+          )
+        }
         <span>{name}</span>
         </div>
         <span>{category}</span>

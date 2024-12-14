@@ -1,0 +1,144 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+//Modely
+
+model User {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  email      String    @unique @db.VarChar(255)
+  password   String    @db.VarChar(255)
+  isActive   Boolean   @default(false)
+  token      String     @db.VarChar(255)
+  roleId     Int      // Role určuje, zda je zaměstnanec nebo ne
+  role       Role @relation(fields: [roleId], references: [id])
+  company    Company @relation(fields: [companyId], references: [id]) // Volitelný vztah
+  companyId  Int       // Povinný vztah k tabulce Company
+  storage    Storage?  @relation(fields: [storageId], references: [id])
+  storageId  Int?      // Cizí klíč pro Storage, pouze pro zaměstnance (např. podle role)
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Role {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  users User[]
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Company {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(255)
+  phone     String?    @db.VarChar(20)
+  email     String?   @db.VarChar(255)
+  address   String?   @db.VarChar(255)
+  psc       Int?
+  city      String?    @db.VarChar(255)
+  users     User[]    // Vztah k uživatelům (zaměstnancům firmy)
+  storages  Storage[] // Firma může mít více skladů
+  categories Category[] // Firma může mít více skladů
+  suppliers Supplier[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+
+model Category {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  position    Position? @relation(fields: [positionId], references: [id])
+  positionId  Int?     // Cizí klíč odkazující na Position tabulku
+  products  Product[]  @relation
+  companyId   Int        // Foreign key for the Storage
+  company     Company    @relation(fields: [companyId], references: [id])  // One Category belongs to one Storage
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Position {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  storage   Storage? @relation(fields: [storageId], references: [id])
+  storageId Int?     // Cizí klíč odkazující na Storage tabulku
+  product   Product? @relation(fields: [productId], references: [id])
+  productId Int?     // Cizí klíč odkazující na Product tabulku
+  categories  Category[] @relation
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductImage {
+  id        Int      @id @default(autoincrement())
+  url       String   @db.VarChar(255)
+  product   Product? @relation(fields: [productId], references: [id])
+  productId Int?     // Cizí klíč odkazující na Product tabulku
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  code        String   @unique @db.VarChar(255)
+  description String?  @db.Text
+  quantity    Int      @default(0)
+  category    Category? @relation(fields: [categoryId], references: [id])
+  categoryId  Int?     // Cizí klíč odkazující na Category tabulku
+  storage     Storage? @relation(fields: [storageId], references: [id])
+  storageId   Int?     // Cizí klíč odkazující na Storage tabulku
+  positions   Position[]
+  productImages ProductImage[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Storage {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  phone      Int
+  address    String     @db.VarChar(255)
+  psc        Int
+  city       String     @db.VarChar(255)
+  products   Product[]
+  users      User[]
+  positions  Position[]
+  companyId  Int       // Cizí klíč odkazující na Company tabulku
+  company    Company   @relation(fields: [companyId], references: [id]) // Opačná strana vztahu
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Supplier {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  phone       Int   
+  email       String   @db.VarChar(255)
+  description String   @db.Text
+  companyId   Int        // Foreign key for the Storage
+  company     Company    @relation(fields: [companyId], references: [id])  // One Category belongs to one Storage
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
