@@ -79,8 +79,7 @@ model Position {
   name      String   @db.VarChar(255)
   storage   Storage? @relation(fields: [storageId], references: [id])
   storageId Int?     // Cizí klíč odkazující na Storage tabulku
-  product   Product? @relation(fields: [productId], references: [id])
-  productId Int?     // Cizí klíč odkazující na Product tabulku
+  products   Product[]
   categories  Category[] @relation
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -106,8 +105,9 @@ model Product {
   categoryId  Int?     // Cizí klíč odkazující na Category tabulku
   storage     Storage? @relation(fields: [storageId], references: [id])
   storageId   Int?     // Cizí klíč odkazující na Storage tabulku
-  positions   Position[]
-  productImages ProductImage[]
+  positionId  Int?       // Cizí klíč odkazující na Company tabulku
+  position    Position?   @relation(fields: [positionId], references: [id]) // Opačná strana vztahu
+  images      ProductImage[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

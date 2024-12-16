@@ -8,21 +8,12 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-const Product = ({name, id, category, quantity, code, pozice, images, reload, position}) => {
+const Product = ({name, id, category, quantity, code, image, position, link}) => {
   const navigate = useNavigate();
 
   const navigateLink = () =>{
     navigate(`/fullapp/add-product/${id}`)
   }  
-  
-  const deleteProduct = async () => {
-    try {
-      const response = await axios.delete(`http://localhost:5000/delete-product/${id}`, { withCredentials: true });
-      reload();
-    } catch (error) {
-      console.error('Chyba při provádění DELETE požadavku:', error);
-    }
-  };
 
 
   useEffect(()=>{
@@ -45,11 +36,7 @@ const Product = ({name, id, category, quantity, code, pozice, images, reload, po
       <div className = "Product flex">
         <div onClick={navigateLink} className='ProductContainer flex'>
         <div className='ProductName flex'>
-        {
-          images && images.length > 0 && (
-            <img src={require('../Images/' + images[0].url.slice(23))} alt="" />
-          )
-        }
+        <img src={image} alt="" />
         <span>{name}</span>
         </div>
         <span>{category}</span>
@@ -58,11 +45,11 @@ const Product = ({name, id, category, quantity, code, pozice, images, reload, po
         <span>{position}</span>
         </div>
         <div className='products_icons flex'>
-        <Link to={`/fullapp/add-product/${id}`}>
+        <Link to={link}>
             <img src={EditButton}/>
         </Link>
         <div  className='deleteItemButton'>
-        <img src={DeleteButton} alt="" onClick={deleteProduct}/>
+        <img src={DeleteButton} alt=""/>
         </div>
         </div>
       </div>

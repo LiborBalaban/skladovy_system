@@ -5,72 +5,62 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import Position from '../components/Position';
+import useData from '../hooks/loadData';
+import { postData } from '../hooks/addToDb';
+import Input from '../components/inputs/input';
+import Button from '../components/button';
+import Select from '../components/inputs/select';
+import Item from '../components/item';
+
 function PositionPage() {
-  const history = useNavigate();
-  const [position, setPosition] = useState([]);
-  const [name, setName] = useState("");
-  const [positions, setPositions] = useState([]);
-  const [storages, setStorages] = useState([]);
-  const [storageID, setStorageID] = useState([]);
-  const handleClick = () => {
-    history('/fullapp/addcategory');
-  };
+  const [formData, setFormData] = useState({
+    positionName:'',
+    storageId:''
+  });
+  //const [positions, savePositions] = useState([]);
 
- useEffect(()=>{
-  loadPositions();
- }, [])
- 
+const savePosition =()=>{
+  console.log(formData);
+  postData('http://localhost:5000/save-position', formData);
+}
 
-  const loadPositions = async () =>{
-    try {
-      const response = await axios.get('http://localhost:5000/get-positions', { withCredentials: true });
-      const positions = response.data.documents;
-      setPositions(positions);
-      
-    } catch{
-      console.error("Chyba při získávání dodavatelů");
-    }
-  }
-  
-  
-  const addToDB = async () => {
-    try {
-      const response = await axios.post('http://localhost:5000/save-position', {
-        name:name
-      }, {
-        withCredentials: true
-      });
-      console.log('Úspěšně uloženo:', response.data.msg);
-      loadPositions();
-  
-    } catch (error) {
-      console.error('Chyba při ukládání:', error);
-    }
-  };
+const handleInputChange = (name, value) => {
+  setFormData((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+};
 
+const handleSelect = (selectedId) => {
+  setFormData((prevData) => ({
+    ...prevData,
+    storageId: selectedId,
+  }));
+};
+  
+  const { data:storages, loading, error } = useData('http://localhost:5000/get-warehouses'); 
+  const { data:positions } = useData('http://localhost:5000/get-positions'); 
+  
 
   return (
     <div className="CategoryPage PositionPage">
         <div className='PositionPageHeader'>
         <h2>Pozice skladů</h2>
         <div className='flex positiondAdd'>
-        <div className='editInput positionInput'>
-            <label htmlFor="">Přidat pozici</label>
-            <input type="text" placeholder='Zadej název skladu' value={name} onInput={(e) => {
-                  setName(e.target.value);
-                }}/>
-        </div>  
-        <button className='addButton' onClick={addToDB}>Přidat</button>
+        <Input placeholder={'Zadejte název pozice...'} label={'Přidat pozici'} name={'positionName'} onChange={handleInputChange}/>
+        <Select data={storages} label={'Vyberte sklad'} onSelect={handleSelect}/>
+        <Button style={'button addButton'} label={'Přidat pozici'} onClick={savePosition}/>
         </div>
         </div>
         <div className='Positions flex'>
-        {
-          positions.map((position, index) =>{
-            return(
-            <Position key = {index} name = {position.name} id = {position._id}/>
-            )
-          })
-        }
+        <h2>Pozice</h2>
+      {
+        positions.map(position =>{
+          return (
+            <Item name={position.name}/>
+          )
+        })
+      }
         </div>
     </div>
   );

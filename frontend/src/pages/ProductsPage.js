@@ -5,55 +5,29 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import axios from 'axios';
-import searchbar from '../Images/search-interface-symbol.png'
+import searchbar from '../Images/search-interface-symbol.png';
+import useData from '../hooks/loadData';
+import Button from '../components/button';
+import useCustomNavigate from '../hooks/navigate';
 
 const ProductPage = () => {
-const [products, setProducts] = useState([]);
-const [query, setQuery] = useState('');
-const history = useNavigate();
+  const { goTo } = useCustomNavigate();
+ const { data:products, loading, error } = useData('http://localhost:5000/get-products'); 
 
-const buttonAdd =() =>{
-  history('/fullapp/add-product');
-};
+ products.forEach(element => {
+  let elementKOkot = element.images.url;
+  console.log(elementKOkot)
+});
 
-useEffect(()=>{
-  loadProducts();
- }, [])
-  
-
-  const loadProducts = async () =>{
-    try {
-      const response = await axios.get("http://localhost:5000/get-products", { withCredentials: true });
-      const products = response.data.documents;
-      setProducts(products);
-      
-    } catch{
-      console.error("Chyba při získávání dodavatelů");
-    }
-  }
-
-  const loadSearchedProduct = async (event) => {
-    try {
-        const response = await axios.get(`http://localhost:5000/searched-product?q=${query}`, {withCredentials: true});
-        setProducts(response.data.documents);
-        console.log(products);
-    } catch (error) {
-        console.error('Error searching:', error);
-    }
-};
-
-const emptyQuery =()=>{
-  if(query.length === 0){
-    loadProducts();
-  }
-}
+ 
 
 return (
   <div className="ProductPage">
     <div className='CategoryPageHeader'>
       <h2>Produkty</h2>
-      <button className='addButton' onClick={buttonAdd}>Přidat</button>
+      <Button label={'Přidat produkt'} style={'button addButton'} onClick={()=>goTo('/fullapp/add-product')}/>
     </div>
+    
     <div className='ProductPageNav flex'>
       <div className='flex ProductPageNavTitles'>
         <span>Název</span>
@@ -64,16 +38,14 @@ return (
       </div>
       <div className='searchbarHeader'>
         <div className='searchbarContainer flex'>
-          <input type="text" className='searchbar' placeholder='Zadej hledaný výraz...' value={query} onInput={(e) => {
-            setQuery(e.target.value);
-          }}/>
-          <img src={searchbar} alt="" onClick={loadSearchedProduct}/>
+          <input type="text" className='searchbar' placeholder='Zadej hledaný výraz...'/>
+          <img src={searchbar} alt=""/>
         </div>
       </div>
     </div>
     <div className='Products flex'>
       {products.map((product, index) => (
-        <Product key={index} name={product.name} id={product._id} category={product.category ? product.category.name : "Nedefinováno"} code={product.code} images={product.images} quantity={product.quantity} reload={loadProducts} position = {product.category ? product.category.position.name : "Nedefinováno"}/>
+        <Product key={index} name={product.name} category={product.category ? product.category.name : "Nedefinováno"} code={product.code} quantity={product.quantity} link={`/fullapp/add-product/${product.id}`} position={product.position.name} image={`http://localhost:5000${product.images[0].url.substring(2).replace(/\\/g, '/')}`}/>
       ))}
     </div>
   </div>

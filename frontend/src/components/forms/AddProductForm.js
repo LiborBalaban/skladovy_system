@@ -1,21 +1,39 @@
 import '../../App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Input from '../inputs/input';
 import Select from '../inputs/select';
 import Textarea from '../inputs/textarea';
 import Button from '../button';
 import useData from '../../hooks/loadData';
 
-const AddProductForm = ({onSubmit}) => {
+const AddProductForm = ({onSubmit, data}) => {
     const [formData, setFormData] = useState({
         productName: '',
         productDescription: '',
-        productPrice: '',
         productQuantity: '',
-        categoryId: '',
+        productCategoryId: '',
+        productStorageId: '',
         productCode: '',
+        productPositionId: '',
       });
+
+      useEffect(() => {
+                    if (data) {
+                      setFormData({
+                        productName: data.name,
+                        productDescription: data.description,
+                        productQuantity: data.quantity,
+                        productCategoryId: data.categoryId,
+                        productStorageId: data.storageId,
+                        productCode: data.code,
+                        productPositionId:data.positionId,
+                      });
+                    }
+                  }, [data]);
+
       const { data:categories, loading, error } = useData('http://localhost:5000/get-categories'); 
+      const { data:positions } = useData('http://localhost:5000/get-positions'); 
+      const { data:storages } = useData('http://localhost:5000/get-warehouses'); 
       
       const handleInputChange = (name, value) => {
         setFormData((prevData) => ({
@@ -24,13 +42,25 @@ const AddProductForm = ({onSubmit}) => {
         }));
       };
 
-      const handleSelect = (selectedId) => {
+      const handleSelectCategory = (selectedId) => {
         setFormData((prevData) => ({
           ...prevData,
-          categoryId: selectedId,
+          productCategoryId: selectedId,
         }));
       };
-    
+
+      const handleSelectStorage = (selectedId) => {
+        setFormData((prevData) => ({
+          ...prevData,
+          productStorageId: selectedId,
+        }));
+      };
+      const handleSelectPosition = (selectedId) => {
+        setFormData((prevData) => ({
+          ...prevData,
+          productPositionId: selectedId,
+        }));
+      };
       const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(formData);
@@ -41,15 +71,16 @@ const AddProductForm = ({onSubmit}) => {
         <h2>Produkt</h2>
         <div className='flex form-container'>
         <div className='form-block'>
-        <Input placeholder='Zadej název produktu...' name='productName' type='text' label='Název produktu' onChange={handleInputChange}/>
-        <Select label='Vyber kategorii' data={categories} onSelect={handleSelect}/>
-        <Input placeholder='Zadej množství produktu...' name='productQuantity' type='number' label='Množství' onChange={handleInputChange}/>
-        <Textarea placeholder='Zadejte informace o produktu...' name = 'productDescription' label='Popis produktu' onChange={handleInputChange}/>
+        <Input placeholder='Zadej název produktu...' name='productName' type='text' label='Název produktu' onChange={handleInputChange} value={formData.productName}/>
+        <Select label='Vyber kategorii' data={categories} onSelect={handleSelectCategory}/>
+        <Input placeholder='Zadej množství produktu...' name='productQuantity' type='number' label='Množství' onChange={handleInputChange} value={formData.productQuantity}/>
+        <Textarea placeholder='Zadejte informace o produktu...' name = 'productDescription' label='Popis produktu' onChange={handleInputChange} value={formData.productDescription}/>
         <Button type='submit' label='Uložit' style='button addButton'/>
         </div>
         <div className='form-block'>
-        <Input placeholder='Zadej cenu produktu...' name='productPrice' type='text' label='Cena produktu' onChange={handleInputChange}/>
-        <Input placeholder='Zadej kód produktu...' name='productCode' type='number' label='Kód produktu' onChange={handleInputChange}/>
+        <Input placeholder='Zadej kód produktu...' name='productCode' type='number' label='Kód produktu' onChange={handleInputChange} value={formData.productCode}/>
+        <Select label='Vyber sklad' data={storages} onSelect={handleSelectStorage} selected={formData.productStorageId}/>
+        <Select label='Vyber pozici' data={positions} onSelect={handleSelectPosition} selected={formData.productPositionId}/>
         </div>
         </div>
     </form>

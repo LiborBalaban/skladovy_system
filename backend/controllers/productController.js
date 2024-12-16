@@ -1,108 +1,187 @@
-const modelProduct = require('../../models/productModel');
+const prisma = require('../databaze/prisma');
 
 
-exports.getProducts= async(req, res) => {
-    const userId = req.user.id;
+exports.getProductsByCompany= async(req, res) => {
+  
     try {
-            const user = await userModel.findOne({_id: userId});
-            if (!user){
-                return res.status(404).json({ msg: "Uživatel nebyl nalezen." });
-            }
-            
-              const products = await Product.find({ storage: user.storage }).populate('category').populate({
-                path: 'category',
-                    populate: {
-                        path: 'position',
-                        model: 'Position'
-                    }
-            });
-            
-          
-            if (!products || products.length === 0) {
-                return res.status(404).json({ msg: "Produkty nebyly nalezeny." });
-            }
-          
-            const productsWithImages = await Promise.all(products.map(async (product) => {
-                const images = await ProductImage.find({ product: product._id });
-                return { ...product.toObject(), images };
-            }));
-    
-            return res.json({
-                msg: "Úspěšně se nám podařilo získat produkty a obrázky",
-                documents: productsWithImages
-            });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({
-                msg: "Bohužel nedošlo k získání produktů a obrázků",
-                documents: []
-            });
+        const companyId = req.user.companyId;
+        const products = await prisma.product.findMany({
+            where: {
+              storage: {
+                company: {
+                  id: companyId, // ID společnosti
+                },
+              },
+            },
+            include: {
+              storage: true, 
+              category: true,
+              position: true,
+              images: {
+                take: 1, // Vrátí pouze první obrázek
+              },
+            },
+          });
+         
+        if (!products) {
+            return res.status(404).json({ message: "Produkty nebyly nalezeny." });
+        }
         
+        return res.json({
+            message: "Úspěšně se nám podařilo získat produkty",
+            documents: products
+        });
+    } catch (error) {
+        console.error("Chyba při získávání produktů:", error);
+        return res.status(500).json({
+            message: "Bohužel nedošlo k získání produktů",
+            documents: []
+        });
+    }
 };
+
+
+exports.getProductsByStorage= async(req, res) => {
+  
+    try {
+        const storageId = req.user.storageId;
+        
+        const products = await prisma.product.findMany({
+            where: {
+             storage:storageId
+            },
+            include: {
+              storage: true,
+            },
+            include:{
+                category:true,
+            }
+          });
+         
+        if (!products) {
+            return res.status(404).json({ message: "Produkty nebyly nalezeny." });
+        }
+        
+        return res.json({
+            message: "Úspěšně se nám podařilo získat produkty",
+            documents: products
+        });
+    } catch (error) {
+        console.error("Chyba při získávání produktů:", error);
+        return res.status(500).json({
+            message: "Bohužel nedošlo k získání produktů",
+            documents: []
+        });
+    }
 };
 
 exports.getProductDetail= async(req, res) => {
-       const productId = req.params.productId;
-           modelProduct.findById(productId)
-               .then(product => {
-                   if (!product) {
-                       return res.status(404).json({ msg: "Produkt nebyl nalezen." });
-                   }
-                   return res.json({
-                       msg: "Úspěšně se nám podařilo získat informace o produktu",
-                       documents: product
-                   });
-               })
-               .catch(err => {
-                   console.error("Chyba při získávání produktu:", err);
-                   return res.status(500).json({ msg: "Nastala chyba při získávání produktu." });
-               });
+    const productId = req.params.productId;
+    try {
+        const product = await prisma.product.findUnique({
+            where: {
+             id:parseInt(productId)
+            }
+          });
+         
+        if (!product) {
+            return res.status(404).json({ message: "Produkt nebyl nalezen." });
+        }
+        
+        return res.json({
+            message: "Úspěšně se nám podařilo získat produkt",
+            documents: product
+        });
+    } catch (error) {
+        console.error("Chyba při získávání produktu:", error);
+        return res.status(500).json({
+            message: "Bohužel nedošlo k získání produktu",
+            documents: []
+        });
+    }
 };
 
 
 exports.createProduct = async(req, res) => {
-     const productId = req.params.productId;
-        const { name, code, category, description} = req.body;
-        
-      
-        modelProduct.findByIdAndUpdate(productId, { name:name,
-            name:name,
-            code:code,
-            category:category,
-            description:description}, { new: true })
-            .then(updatedProduct => {
-                if (!updatedProduct) {
-                    return res.status(404).json({ msg: "Produkt nebyl nalezen." });
-                }
-                return res.json({ msg: `Produkt ${updatedProduct.name} byl úspěšně aktualizován.`, updatedProduct });
-            })
-            .catch(err => {
-                console.error("Chyba při aktualizaci produktu:", err);
-                return res.status(500).json({ msg: "Nastala chyba při aktualizaci produktu." });
-            });
+     const { productName, productCode, productCategoryId, productDescription, productStorageId, productQuantity, productPositionId} = req.body;
+
+     const companyId = req.user.companyId;
+
+     if (!companyId) {
+         return res.status(400).json({ message: "Chybí informace o ID společnosti." });
+     }
+ 
+     try{
+         const product = await prisma.product.create({
+             data:{
+                 name:productName,
+                 code: productCode,
+                 description: productDescription,
+                 categoryId: parseInt(productCategoryId),
+                 storageId: parseInt(productStorageId),
+                 quantity:parseInt(productQuantity),
+                 positionId:parseInt(productPositionId),
+             },
+         })
+ 
+         if(product){
+             return res.status(200).json({ 
+                message: `Produkt ${product.name} byl úspěšně vytvořen.`,
+                productId: product.id
+             });
+         }
+         else{
+             res.status(500).json({ message: "Produkt nebyl vytvořen." });  
+         }
+     }
+     catch (error) {
+         console.error("Chyba při vytváření produktu:", error);
+         res.status(500).json({ message: "Bohužel došlo k chybě při vytváření produktu." });
+     }
 };
 
 
 exports.updateProduct = async(req, res) => {
     const productId = req.params.productId;
-       const { name, code, category, description} = req.body;
-       
-     
-       modelProduct.findByIdAndUpdate(productId, { name:name,
-           name:name,
-           code:code,
-           category:category,
-           description:description}, { new: true })
-           .then(updatedProduct => {
-               if (!updatedProduct) {
-                   return res.status(404).json({ msg: "Produkt nebyl nalezen." });
-               }
-               return res.json({ msg: `Produkt ${updatedProduct.name} byl úspěšně aktualizován.`, updatedProduct });
-           })
-           .catch(err => {
-               console.error("Chyba při aktualizaci produktu:", err);
-               return res.status(500).json({ msg: "Nastala chyba při aktualizaci produktu." });
-           });
+    const { productName, productCode, productCategoryId, productDescription, productStrageId, productQuantity, positions} = req.body;
+
+    const companyId = req.user.companyId;
+
+    if (!companyId) {
+        return res.status(400).json({ message: "Chybí informace o ID společnosti." });
+    }
+
+    try{
+        const product = await prisma.product.update({
+            where:{
+                id:parseInt(productId)
+            },
+            data:{
+                name:productName,
+                code: productCode,
+                description: productDescription,
+                categoryId:productCategoryId,
+                storageId:productStrageId,
+                quantity:productQuantity,
+                positions:{
+                   connect: positions.map((positionId) => ({ id: positionId })),
+                }
+            },
+        })
+
+        if(product){
+            return res.status(200).json({ 
+               message: `Produkt ${product.name} byl úspěšně aktualizován.`
+            });
+        }
+        else{
+            res.status(500).json({ message: "Produkt nebyl aktualizován." });  
+        }
+    }
+    catch (error) {
+        console.error("Chyba při aktualizaci produktu:", error);
+        res.status(500).json({ message: "Bohužel došlo k chybě při aktualizaci produktu." });
+    }
 };
 
 
@@ -110,18 +189,15 @@ exports.updateProduct = async(req, res) => {
 exports.deleteProduct = async(req, res) => {
       try {
             const productId = req.params.productId;
-    
-            
-            const deletedProduct = await modelProduct.findByIdAndDelete(productId);
+
+            const deletedProduct = await prisma.product.delete({
+                where:{
+                    id:parseInt(productId)
+                }
+            });
             if (!deletedProduct) {
                 return res.status(404).json({ msg: "Produkt nebyl nalezen." });
             }
-    
-            await modelStockIn.deleteMany({ product: productId });
-    
-            await modelStockOut.deleteMany({ product: productId });
-    
-            await modelImages.deleteMany({product:productId});
     
             return res.json({ msg: `Produkt ${deletedProduct.name} byl úspěšně smazán.` });
         } catch (err) {

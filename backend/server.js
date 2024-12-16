@@ -4,12 +4,19 @@ const express = require('express');
 const connectDB = require('./databaze/connect');
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+const path = require('path');
+
 const userRouter = require('./routes/userRoutes');
 const authRouter = require('./routes/authRoutes');
 const warehouseRouter = require('./routes/warehouseRoutes');
 const categoryRouter = require('./routes/categoryRoutes');
 const supplierRouter = require('./routes/supplierRouter');
 const roleRouter = require('./routes/roleRoutes');
+const imageRouter = require('./routes/imageRoutes');
+const positionRouter = require('./routes/positionRoutes');
+const productRouter = require('./routes/productRoutes');
+
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -33,13 +40,15 @@ app.use(cors({
   allowedHeaders: "Content-Type, Authorization"
 }));
 
-
 app.use('/', cors(corsOptions), userRouter);
 app.use('/', cors(corsOptions), authRouter);
 app.use('/', cors(corsOptions), warehouseRouter);
 app.use('/', cors(corsOptions), categoryRouter);
 app.use('/', cors(corsOptions), supplierRouter);
 app.use('/', cors(corsOptions), roleRouter);
+app.use('/', cors(corsOptions), imageRouter);
+app.use('/', cors(corsOptions), positionRouter);
+app.use('/', cors(corsOptions), productRouter);
 
 app.listen(PORT, () => {
   console.log(`Server běží na portu ${PORT}!`);

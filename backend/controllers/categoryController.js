@@ -48,7 +48,7 @@ exports.getCategoryDetail = async(req, res) => {
     } catch (error) {
         console.error("Chyba při získávání kategore:", error);
         return res.status(500).json({
-            message: "Bohužel nedošlo k získání kategore",
+            message: "Bohužel nedošlo k získání kategorie",
             documents: []
         });
     }
