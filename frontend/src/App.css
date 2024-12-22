@@ -72,6 +72,38 @@ button:hover{
   justify-content: start;
 }
 
+.autocomplete-suggestions{
+  width: 80%;
+  height: 150px;
+  outline: var(--colorGray);
+  background-color: var(--colorWhite);
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.autocomplete-suggestions div{
+  gap: 15px;
+  border-bottom: 1px solid var(--colorGray);
+  padding: 10px 5px;
+}
+
+.autocomplete-suggestions div:hover{
+  background-color: var(--colorGray);
+}
+
+.autocomplete-suggestions span:first-child{
+  color: var(--colorBlue);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.autocomplete-suggestions span:last-child{
+  color: var(--colorBlue);
+  font-size: 14px;
+}
+
 .input-flex label{
   color: var(--colorBlue);
   font-weight: 800;
@@ -1214,11 +1246,17 @@ select{
 
 /*Stock*/
 .StockProducts{
-  width: 60%;
+  width: 50%;
   height: 100%;
   flex-direction: column;
   gap: 15px;
   overflow-y: scroll;
+  align-items: start;
+}
+
+.StockProducts h2{
+  font-size: 16px;
+  color: var(--colorBlue);
 }
 
 .stockHeader{
@@ -1326,10 +1364,10 @@ animation: fade 0.5s ease-in-out;
 
 .StockForm{
   height: 100%;
-  align-items: center;
+  align-items: end;
   justify-content: start;
   flex-direction: column;
-  width: 40%;
+  width: 50%;
   gap: 20px;
 }
 

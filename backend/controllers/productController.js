@@ -7,14 +7,9 @@ exports.getProductsByCompany= async(req, res) => {
         const companyId = req.user.companyId;
         const products = await prisma.product.findMany({
             where: {
-              storage: {
-                company: {
-                  id: companyId, // ID společnosti
-                },
-              },
+             companyId:companyId
             },
             include: {
-              storage: true, 
               category: true,
               position: true,
               images: {
@@ -40,6 +35,35 @@ exports.getProductsByCompany= async(req, res) => {
     }
 };
 
+exports.getSearchedProducts= async(req, res) => {
+  
+    try {
+        const search = req.query.search.toLowerCase();
+        
+        const products = await prisma.product.findMany({
+            where: {
+             name:{
+                contains: search
+             }
+            }
+          });
+         
+        if (!products) {
+            return res.status(404).json({ message: "Produkty nebyly nalezeny." });
+        }
+        
+        return res.json({
+            message: "Úspěšně se nám podařilo získat produkty",
+            documents: products
+        });
+    } catch (error) {
+        console.error("Chyba při získávání produktů:", error);
+        return res.status(500).json({
+            message: "Bohužel nedošlo k získání produktů",
+            documents: []
+        });
+    }
+};
 
 exports.getProductsByStorage= async(req, res) => {
   
@@ -103,7 +127,7 @@ exports.getProductDetail= async(req, res) => {
 
 
 exports.createProduct = async(req, res) => {
-     const { productName, productCode, productCategoryId, productDescription, productStorageId, productQuantity, productPositionId} = req.body;
+     const { productName, productCode, productCategoryId, productDescription, productQuantity, productPositionId} = req.body;
 
      const companyId = req.user.companyId;
 
@@ -118,9 +142,9 @@ exports.createProduct = async(req, res) => {
                  code: productCode,
                  description: productDescription,
                  categoryId: parseInt(productCategoryId),
-                 storageId: parseInt(productStorageId),
                  quantity:parseInt(productQuantity),
                  positionId:parseInt(productPositionId),
+                 companyId:parseInt(companyId)
              },
          })
  

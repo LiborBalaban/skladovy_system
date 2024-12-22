@@ -15,6 +15,7 @@ const roleRouter = require('./routes/roleRoutes');
 const imageRouter = require('./routes/imageRoutes');
 const positionRouter = require('./routes/positionRoutes');
 const productRouter = require('./routes/productRoutes');
+const movementRouter = require('./routes/stockRoutes');
 
 
 const app = express();
@@ -49,6 +50,7 @@ app.use('/', cors(corsOptions), roleRouter);
 app.use('/', cors(corsOptions), imageRouter);
 app.use('/', cors(corsOptions), positionRouter);
 app.use('/', cors(corsOptions), productRouter);
+app.use('/', cors(corsOptions), movementRouter);
 
 app.listen(PORT, () => {
   console.log(`Server běží na portu ${PORT}!`);

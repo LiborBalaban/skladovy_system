@@ -29,6 +29,7 @@ model User {
   companyId  Int       // Povinný vztah k tabulce Company
   storage    Storage?  @relation(fields: [storageId], references: [id])
   storageId  Int?      // Cizí klíč pro Storage, pouze pro zaměstnance (např. podle role)
+  movements StockMovement[]
 
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
@@ -55,6 +56,7 @@ model Company {
   storages  Storage[] // Firma může mít více skladů
   categories Category[] // Firma může mít více skladů
   suppliers Supplier[]
+  products Product[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -103,12 +105,13 @@ model Product {
   quantity    Int      @default(0)
   category    Category? @relation(fields: [categoryId], references: [id])
   categoryId  Int?     // Cizí klíč odkazující na Category tabulku
-  storage     Storage? @relation(fields: [storageId], references: [id])
-  storageId   Int?     // Cizí klíč odkazující na Storage tabulku
   positionId  Int?       // Cizí klíč odkazující na Company tabulku
   position    Position?   @relation(fields: [positionId], references: [id]) // Opačná strana vztahu
+  companyId  Int       // Cizí klíč odkazující na Company tabulku
+  Company    Company   @relation(fields: [companyId], references: [id]) // Opačná strana vztahu
   images      ProductImage[]
-
+  stocks Stock[]
+  StockTransaction StockTransaction[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -120,12 +123,13 @@ model Storage {
   address    String     @db.VarChar(255)
   psc        Int
   city       String     @db.VarChar(255)
-  products   Product[]
   users      User[]
   positions  Position[]
   companyId  Int       // Cizí klíč odkazující na Company tabulku
   company    Company   @relation(fields: [companyId], references: [id]) // Opačná strana vztahu
-
+  stocks Stock[]
+  stockMovements StockMovement[]
+  StockTransaction StockTransaction[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 }
@@ -138,7 +142,55 @@ model Supplier {
   description String   @db.Text
   companyId   Int        // Foreign key for the Storage
   company     Company    @relation(fields: [companyId], references: [id])  // One Category belongs to one Storage
+  movements   StockMovement[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model StockMovement {
+  id             Int        @id @default(autoincrement())
+  typeId         Int    
+  type MovementType @relation(fields: [typeId], references: [id])
+  invoiceNumber  Int? 
+  description        String   @db.VarChar(255)
+  date           DateTime 
+  storageId    Int      
+  storage      Storage @relation(fields: [storageId], references: [id])
+  supplierId    Int      
+  supplier      Supplier @relation(fields: [supplierId], references: [id])
+  stockTransaction      StockTransaction[] 
+  userId Int
+  user      User @relation(fields: [userId], references: [id])
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Stock {
+  id             Int        @id @default(autoincrement())
+  storageId    Int
+  productId      Int
+  quantity       Int       // Počet produktů v daném skladu
+  product        Product   @relation(fields: [productId], references: [id])
+  storage      Storage @relation(fields: [storageId], references: [id])
+}
+
+model StockTransaction {
+  id                Int        @id @default(autoincrement())
+  movementId Int       // ID transakce (naskladnění/vyskladnění)
+  productId         Int       // ID produktu
+  quantity          Int       // Množství produktu v dané transakci
+  price Int
+  storageId    Int
+  storage      Storage @relation(fields: [storageId], references: [id])
+
+  movement  StockMovement @relation(fields: [movementId], references: [id])
+  product   Product       @relation(fields: [productId], references: [id])
+}
+
+model MovementType {
+  id                Int        @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+
+  movements  StockMovement[]
 }

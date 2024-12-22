@@ -10,12 +10,14 @@ import { postData } from '../hooks/addToDb';
 import useData from '../hooks/loadData';
 import axios from 'axios';
 import Image from '../components/Images';
+import ProductStock from '../components/ProductStock';
 
 const AddProductPage = () => {
 const { id } = useParams();
 const [productId, setProductId] = useState(id || null); // Inicializuj ID, pokud existuje
 
 const { data:product, loading, error } = useData(`http://localhost:5000/get-product/${id}`); 
+const { data:movements } = useData(`http://localhost:5000/get-movements/${id}`); 
 
 const { data:images } = useData(`http://localhost:5000/get-images/${id}`); 
 
@@ -70,6 +72,7 @@ useEffect(() => {
           })
         }
         </div>
+        <ProductStock data={movements}/>
         </div>
     </div>
   );

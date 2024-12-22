@@ -45,7 +45,7 @@ return (
     </div>
     <div className='Products flex'>
       {products.map((product, index) => (
-        <Product key={index} name={product.name} category={product.category ? product.category.name : "Nedefinováno"} code={product.code} quantity={product.quantity} link={`/fullapp/add-product/${product.id}`} position={product.position.name} image={`http://localhost:5000${product.images[0].url.substring(2).replace(/\\/g, '/')}`}/>
+        <Product key={index} name={product.name} category={product.category ? product.category.name : "Nedefinováno"} code={product.code} quantity={product.quantity} link={`/fullapp/add-product/${product.id}`} position={product.position.name}/>
       ))}
     </div>
   </div>
