@@ -3,6 +3,7 @@ exports.AuthRoute = async (req, res) => {
         documents: {
             message: "You are authenticated",
             role:req.user.roleId,
+            name:req.user.name
         }
     });
 };

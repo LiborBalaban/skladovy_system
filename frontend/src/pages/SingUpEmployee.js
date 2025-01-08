@@ -1,4 +1,5 @@
 import '../App.css';
+import '../responsive.css';
 import SingUpEmployeeForm from '../components/forms/SingUpEmployeeForm';
 import { postData } from '../hooks/addToDb';
 

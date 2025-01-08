@@ -70,18 +70,17 @@ const AddProductForm = ({onSubmit, data}) => {
     <form onSubmit={handleSubmit} className='form'>
         <h2>Produkt</h2>
         <div className='flex form-container'>
-        <div className='form-block'>
         <Input placeholder='Zadej název produktu...' name='productName' type='text' label='Název produktu' onChange={handleInputChange} value={formData.productName}/>
-        <Select label='Vyber kategorii' data={categories} onSelect={handleSelectCategory}/>
-        <Input placeholder='Zadej množství produktu...' name='productQuantity' type='number' label='Množství' onChange={handleInputChange} value={formData.productQuantity}/>
         <Textarea placeholder='Zadejte informace o produktu...' name = 'productDescription' label='Popis produktu' onChange={handleInputChange} value={formData.productDescription}/>
-        <Button type='submit' label='Uložit' style='button addButton'/>
+        <div className='form-block'>
+        <Select label='Vyber kategorii' data={categories} onSelect={handleSelectCategory} selected={formData.productCategoryId}/>
+        <Input placeholder='Zadej množství produktu...' name='productQuantity' type='number' label='Množství' onChange={handleInputChange} value={formData.productQuantity}/>
         </div>
         <div className='form-block'>
         <Input placeholder='Zadej kód produktu...' name='productCode' type='number' label='Kód produktu' onChange={handleInputChange} value={formData.productCode}/>
-        <Select label='Vyber sklad' data={storages} onSelect={handleSelectStorage} selected={formData.productStorageId}/>
         <Select label='Vyber pozici' data={positions} onSelect={handleSelectPosition} selected={formData.productPositionId}/>
         </div>
+        <Button type='submit' label='Uložit' style='button addButton'/>
         </div>
     </form>
   );

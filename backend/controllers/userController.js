@@ -244,3 +244,14 @@ exports.getUser = async(req, res) => {
 }
     
 };
+
+exports.logout = async(req, res) => {
+    res.setHeader('Set-Cookie', cookie.serialize('token', '', {
+        httpOnly: true,  // Cookie není dostupná pro JavaScript
+        secure: process.env.NODE_ENV === 'production',  // Pouze pro HTTPS
+        maxAge: 0,  // Nastavíme na 0, což cookie okamžitě odstraní
+        path: '/'  // Cookie je dostupná pro celou aplikaci
+    }));
+    
+    res.json({ message: 'Jste úspěšně odhlášeni.' });
+};

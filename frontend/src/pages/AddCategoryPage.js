@@ -1,4 +1,5 @@
 import '../App.css';
+import '../responsive.css';
 import { useState, useEffect } from 'react';
 import {useParams } from 'react-router-dom';
 import AddCategoryForm from '../components/forms/AddCategoryForm';
@@ -22,7 +23,7 @@ const AddCategoryPage = () => {
   };
  
   return (
-    <div className="AddCategoryPage flex">
+    <div className="page flex">
     <AddCategoryForm onSubmit={handleAddCategory} data={category}/>       
     </div>
   );

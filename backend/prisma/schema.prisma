@@ -110,8 +110,8 @@ model Product {
   companyId  Int       // Cizí klíč odkazující na Company tabulku
   Company    Company   @relation(fields: [companyId], references: [id]) // Opačná strana vztahu
   images      ProductImage[]
-  stocks Stock[]
   StockTransaction StockTransaction[]
+  stocks            Stock[]            // Vztah k tabulce Stock
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -127,7 +127,6 @@ model Storage {
   positions  Position[]
   companyId  Int       // Cizí klíč odkazující na Company tabulku
   company    Company   @relation(fields: [companyId], references: [id]) // Opačná strana vztahu
-  stocks Stock[]
   stockMovements StockMovement[]
   StockTransaction StockTransaction[]
   createdAt  DateTime   @default(now())
@@ -151,28 +150,31 @@ model Supplier {
 model StockMovement {
   id             Int        @id @default(autoincrement())
   typeId         Int    
-  type MovementType @relation(fields: [typeId], references: [id])
   invoiceNumber  Int? 
   description        String   @db.VarChar(255)
   date           DateTime 
   storageId    Int      
   storage      Storage @relation(fields: [storageId], references: [id])
-  supplierId    Int      
-  supplier      Supplier @relation(fields: [supplierId], references: [id])
+  supplierId    Int?      
+  supplier      Supplier? @relation(fields: [supplierId], references: [id])
   stockTransaction      StockTransaction[] 
   userId Int
   user      User @relation(fields: [userId], references: [id])
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+   type MovementType @relation(fields: [typeId], references: [id])
 }
 
 model Stock {
-  id             Int        @id @default(autoincrement())
-  storageId    Int
-  productId      Int
-  quantity       Int       // Počet produktů v daném skladu
-  product        Product   @relation(fields: [productId], references: [id])
-  storage      Storage @relation(fields: [storageId], references: [id])
+  id         Int    @id @default(autoincrement())
+  productId  Int
+  storageId  Int
+  quantity   Int
+
+  products    Product  @relation(fields: [productId], references: [id]) // Vztah k tabulce Product
+
+  @@unique([productId, storageId]) // Unikátní kombinace
 }
 
 model StockTransaction {

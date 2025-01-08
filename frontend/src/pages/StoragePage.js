@@ -7,25 +7,38 @@ import axios from 'axios';
 import Item from '../components/item';
 import useData from '../hooks/loadData';
 import useCustomNavigate from '../hooks/navigate';
+import List from '../components/List';
+import Header from '../components/Header';
 function StoragePage() {
 
  const { data:storages, loading, error } = useData('http://localhost:5000/get-warehouses'); 
  const { goTo } = useCustomNavigate();
+
+ const [filtredStorages, setFiltredStorages] = useState([]);
+
+ useEffect(() => {
+  setFiltredStorages(storages || []);
+}, [storages]); 
+
+
+const hadnleFilteredData =(data)=>{
+  setFiltredStorages(data);
+}
+
+ const HeaderTitles = [
+  {name:'Název skladu'},
+  {name:'Město'},
+  {name:'Akce'},
+]
+
   return (
-    <div className="CategoryPage">
-        <div className='CategoryPageHeader'>
+    <div className="page">
+        <div className='page-header'>
         <h2>Sklady</h2>
         <Button style='button addButton' label='Přidat sklad' onClick={()=>goTo('/admin/add-storage')}/>
         </div>
-        <div className='Storages flex'>
-        {
-          storages.map(storage => {
-            return(
-              <Item name={storage.name} info={storage.city} link={`/admin/add-storage/${storage.id}`}/>
-            )
-          })
-        }
-        </div>
+        <Header data={storages} getFiltred={hadnleFilteredData} label={'Vyhledat sklad'}/>
+        <List data={filtredStorages} titles={HeaderTitles} type={'storage'}/>
     </div>
   );
 }

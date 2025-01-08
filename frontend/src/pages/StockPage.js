@@ -6,6 +6,7 @@ import AutoCompleteInput from '../components/inputs/AutoCompleteInput';
 import useData from '../hooks/loadData';
 import StockForm from '../components/forms/StockForm';
 import { postData } from '../hooks/addToDb';
+import Button from '../components/button';
 
 const StockPage = () => {
     const [products, setProducts] = useState([]); // Pole produktů s ID, množstvím a cenou
@@ -47,24 +48,22 @@ const StockPage = () => {
         return { ...product, ...productData };
     });
 
-    useEffect(() => {
-        console.log('Updated products:', products);
-    }, [products]);
 
     const handleStock = (formData) => {
         console.log("Data přijatá z formuláře:", formData);
         const payload = {
             stockDetails: formData,
-            type : 1,
+            typeMovement : 1,
             products: products
         };
         console.log(payload);
         postData('http://localhost:5000/save-stock', payload);
       };
 
+
     return (
-        <div className="ProductPage">
-            <div className='CategoryPageHeader'>
+        <div className="page">
+            <div className='page-header'>
                 <h2>Produkty</h2>
             </div>
             <div className='StockPageNav'>
@@ -75,8 +74,10 @@ const StockPage = () => {
             </div>
             <div className='flex StorckProductsEdit'>
                 <div className='StockProducts flex'>
-                    {/* AutoCompleteInput s předáním dat a callbackem */}
+                    <div className='flex buttonFlex' >
                     <AutoCompleteInput data={all_products} onClick={getId} />
+                    <Button label={'Požádat o přidání'} style={'button addButton'}/>
+                    </div>
                     
                     <h2>Vybrané produkty: {products.length}</h2>
                     {selectedProducts.map((product) => (

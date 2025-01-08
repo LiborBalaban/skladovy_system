@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
   const [role, setRole] = useState(null);
 
   const loginUser = (userData) => {
-    setUser(userData);
+    setUser(userData.name);
     setRole(userData.role);
   };
 

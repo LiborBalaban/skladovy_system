@@ -1,55 +1,83 @@
 import '../App.css';
-import React, { useState } from "react";
+import '../responsive.css';
+import React, { useState, useEffect } from "react";
 import Product from '../components/Product';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import axios from 'axios';
-import searchbar from '../Images/search-interface-symbol.png';
-import useData from '../hooks/loadData';
 import Button from '../components/button';
 import useCustomNavigate from '../hooks/navigate';
+import Select from '../components/inputs/select';
+import searchbar from '../Images/search-interface-symbol.png';
+import useData from '../hooks/loadData';
+import { useUser } from '../context/UserContext';
+import Input from '../components/inputs/input';
+import List from '../components/List';
+import Header from '../components/Header';
 
 const ProductPage = () => {
+  const [products, setProducts] = useState([]);
+  const [storageId, setStorageId] = useState('');
+  const { role } = useUser();
+
+
   const { goTo } = useCustomNavigate();
- const { data:products, loading, error } = useData('http://localhost:5000/get-products'); 
+  const { data: storages } = useData('http://localhost:5000/get-warehouses');
+  const { data: all_products, loading: loadingProducts, error: errorProducts } = useData('http://localhost:5000/get-products');
+  const { data: storages_products } = useData(`http://localhost:5000/get-storage-products/${storageId}`);
+  const { data: employee_products } = useData(`http://localhost:5000/get-storage-products`);
 
- products.forEach(element => {
-  let elementKOkot = element.images.url;
-  console.log(elementKOkot)
-});
+  // Nastavení výchozích produktů
+  useEffect(() => {
+    if (all_products) {
+      setProducts(all_products);
+    }
+  }, [all_products]);
 
- 
+  // Přepnutí produktů na základě výběru skladu
+  useEffect(() => {
+    if (role === 4 && employee_products) {
+      setProducts(employee_products);
+    } else if (storageId && storages_products) {
+      setProducts(storages_products);
+    } else if (!storageId && all_products) {
+      setProducts(all_products);
+    }
+  }, [role, storageId, storages_products, all_products]);
 
-return (
-  <div className="ProductPage">
-    <div className='CategoryPageHeader'>
-      <h2>Produkty</h2>
-      <Button label={'Přidat produkt'} style={'button addButton'} onClick={()=>goTo('/fullapp/add-product')}/>
-    </div>
-    
-    <div className='ProductPageNav flex'>
-      <div className='flex ProductPageNavTitles'>
-        <span>Název</span>
-        <span>Kategorie</span>
-        <span>Počet</span>
-        <span>Kód</span>
-        <span>Pozice</span>
+  const [filtredProducts, setFiltredProducts] = useState([]);
+
+
+ const hadnleFilteredData =(data)=>{
+   setFiltredProducts(data);
+ }
+
+  const handleSelectId = (selectedId) => {
+    setStorageId(selectedId);
+  };
+
+  const HeaderTitles = [
+    {name:'Název'},
+    {name:'Kategorie'},
+    {name:'Počet'},
+    {name:'Kód'},
+    {name:'Pozice'},
+    {name:'Akce'},
+  ]
+  
+
+  if (loadingProducts) return <p>Načítání produktů...</p>;
+  if (errorProducts) return <p>Chyba při načítání produktů: {errorProducts.message}</p>;
+
+  return (
+    <div className="page">
+      <div className='page-header flex'>
+        <h2>Produkty</h2>
+        {role === 3 && (<Button label={'Přidat produkt'} style={'button addButton'} onClick={() => goTo('/fullapp/add-product')} />)}
       </div>
-      <div className='searchbarHeader'>
-        <div className='searchbarContainer flex'>
-          <input type="text" className='searchbar' placeholder='Zadej hledaný výraz...'/>
-          <img src={searchbar} alt=""/>
-        </div>
-      </div>
+
+      
+      <Header data={products} getFiltred={hadnleFilteredData} label={'Vyhledat produkt'} selectData={storages} getSelectId={handleSelectId}/>
+      <List data={filtredProducts} type={'products'} titles={HeaderTitles}/>
     </div>
-    <div className='Products flex'>
-      {products.map((product, index) => (
-        <Product key={index} name={product.name} category={product.category ? product.category.name : "Nedefinováno"} code={product.code} quantity={product.quantity} link={`/fullapp/add-product/${product.id}`} position={product.position.name}/>
-      ))}
-    </div>
-  </div>
-);
+  );
 };
 
 export default ProductPage;

@@ -8,6 +8,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 router.post('/save-user', userController.registrationUser);
 router.post('/activate-user/:token', userController.verification);
 router.post('/login-user', userController.loginUser);
+router.post('/logout-user', userController.logout);
 router.post('/invite-employee', authMiddleware.AuthAdmin, userController.crateEmployee);
 router.post('/save-employee', userController.registrationEmployee);
 router.get('/get-users', authMiddleware.AuthAdmin , userController.getUsers);

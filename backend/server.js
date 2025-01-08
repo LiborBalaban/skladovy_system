@@ -16,6 +16,7 @@ const imageRouter = require('./routes/imageRoutes');
 const positionRouter = require('./routes/positionRoutes');
 const productRouter = require('./routes/productRoutes');
 const movementRouter = require('./routes/stockRoutes');
+const companyRouter = require('./routes/companyRoutes');
 
 
 const app = express();
@@ -51,6 +52,7 @@ app.use('/', cors(corsOptions), imageRouter);
 app.use('/', cors(corsOptions), positionRouter);
 app.use('/', cors(corsOptions), productRouter);
 app.use('/', cors(corsOptions), movementRouter);
+app.use('/', cors(corsOptions), companyRouter);
 
 app.listen(PORT, () => {
   console.log(`Server běží na portu ${PORT}!`);

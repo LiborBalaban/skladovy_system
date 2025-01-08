@@ -8,16 +8,27 @@
   font-family: "Poppins", sans-serif;
 }
 
+
 :root{
   --colorBlack:black;
-  --colorBlue: rgb(2, 120, 255);
+  --colorBlue: #2E9F62;
   --colorWhite:white;
-  --colorGray:rgb(241, 241, 241);
+  --colorDefault:#232830;
+  --colorGray:#15191F;
   --colorDarkGray:rgb(199, 199, 199);
   --colorGreen:rgb(0, 255, 0);
   --colorRed:red;
   --colorNormalGray:rgb(131, 130, 130);
 }
+
+h2{
+  color: var(--colorWhite);
+}
+
+span{
+  color: var(--colorWhite);
+}
+
 .flex{
   display: flex;
   align-items: center;
@@ -51,17 +62,68 @@ button:hover{
   background-color: var(--colorRed);
 }
 
+.deleteImageButton{
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  border: 2px solid red;
+  background-color: transparent;
+  color: var(--colorWhite);
+  font-weight: 900;
+  justify-content: center;
+  font-size: 10px;
+}
+
 .button:hover{
   transform: 0.3s;
   background-color: var(--colorBlack);
 }
-/*LIST OF DATA*/
-.list{
-  height: 70%;
+
+.editButton{
+  width: 120px;
+  height: 40px;
+  background-color: var(--colorBlue);
+  border: none;
+  color: var(--colorWhite);
+  font-weight: 400;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
-  width: 100%;
-  flex-direction: column;
+  border-radius: 5px;
 }
+
+.editButton span{
+  width: auto;
+  text-align: start;
+  flex: 0 !important;
+}
+
+.editButton:hover{
+  background-color: var(--colorBlack);
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.deleteItemButton{
+  width: 120px;
+  height: 40px;
+  border: none;
+  color: var(--colorWhite);
+  font-weight: 400 !important;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.deleteItemButton{
+  background-color: var(--colorDefault);
+  outline: 1px solid var(--colorWhite);
+}
+
+
 /*INPUT*/
 .input-flex{
   display: flex;
@@ -74,19 +136,32 @@ button:hover{
 
 .autocomplete-suggestions{
   width: 80%;
-  height: 150px;
+  max-height: 150px;
   outline: var(--colorGray);
-  background-color: var(--colorWhite);
-  display: flex;
+  background-color: var(--colorDefault);
+  display: none;
   flex-direction: column;
   padding: 10px;
   border-radius: 5px;
+  outline: 2px solid var(--colorBlue);
+  transition: 0.2s;
+}
+
+.buttonFlex{
+  width: 100%;
+  gap: 10px;
+  align-items: start;
 }
 
 .autocomplete-suggestions div{
   gap: 15px;
   border-bottom: 1px solid var(--colorGray);
   padding: 10px 5px;
+
+}
+
+.autocomplete-suggestions div:hover{
+  cursor: pointer;
 }
 
 .autocomplete-suggestions div:hover{
@@ -94,7 +169,7 @@ button:hover{
 }
 
 .autocomplete-suggestions span:first-child{
-  color: var(--colorBlue);
+  color: var(--colorWhite);
   font-weight: 600;
   font-size: 14px;
 }
@@ -106,9 +181,20 @@ button:hover{
 
 .input-flex label{
   color: var(--colorBlue);
-  font-weight: 800;
+  font-weight:600;
   font-size: 14px;
 }
+
+.input-flex input[type='checkbox'] {
+  width: 15px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.checkbox-input{
+  margin-right: 10px;
+}
+
 
 .input-flex input{
   width: 100%;
@@ -116,8 +202,11 @@ button:hover{
   padding-left: 15px;
   border: none;
   border-radius: 5px;
-  outline: 1px solid var(--colorDarkGray);
+  outline: 2px solid var(--colorBlue);
+  background-color: transparent;
+  color: var(--colorWhite);
 }
+
 
 .input-flex select{
   width: 100%;
@@ -126,7 +215,9 @@ button:hover{
   padding-right: 15px;
   border: none;
   border-radius: 5px;
-  outline: 1px solid var(--colorDarkGray);
+  outline: 2px solid var(--colorBlue);
+  background-color: transparent;
+  color: var(--colorWhite);
 }
 
 
@@ -137,7 +228,9 @@ button:hover{
   padding-top: 15px;
   border: none;
   border-radius: 5px;
-  outline: 1px solid var(--colorDarkGray);
+  outline: 2px solid var(--colorBlue);
+  background-color: transparent;
+  color: var(--colorWhite);
 }
 
 /*ITEM*/
@@ -145,17 +238,40 @@ button:hover{
   display: flex;
   align-items: center;
   width: 100%;
-  background-color: var(--colorWhite);
+  background-color: var(--colorDefault);
   box-shadow: 8px 8px 10px rgba(0,0,0,0.05);
-  padding: 15px;
+  height: 70px;
+  padding: 0px 15px;
   justify-content: space-between;
   border-radius: 5px;
+  border-left: 2px solid var(--colorBlue);
 }
 
 .item h2{
   color: var(--colorBlue);
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: 600;
+  font-size: 14px;
+  justify-self: start;
+}
+
+.itemContainer{
+  flex: 1;
+}
+
+.itemInfo{
+  flex: 1;
+}
+
+.item input{
+  text-align: center;
+  width: 80px;
+  height: 30px;
+}
+
+
+.item span{
+  color: var(--colorWhite);
+  font-size: 14px;
 }
 
 .item_icons{
@@ -165,14 +281,15 @@ button:hover{
 }
 
 .item_icons img{
-  filter: invert(50%);
-  height: 30px;
+  filter: invert(100%);
+  height: 27px;
 }
 
 /*PAGE*/
 .page{
   width: 100%;
   height: 100%;
+  padding: 25px 0px;
 }
 
 .page-header{
@@ -180,23 +297,18 @@ button:hover{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100px;
+  padding: 0px 0px 15px 0px;
 }
 
-.page-items{
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  height: 70%;
-  gap: 10px;
-  width: 100%;
-  flex-direction: column;
+.page-header h2{
+  font-size: 20px;
 }
+
 
 /*FORM*/
 .form{
   width: 100%;
-  background-color: var(--colorWhite);
+  background-color: var(--colorDefault);
   border-radius: 10px;
   gap: 20px;
   display: flex;
@@ -209,24 +321,72 @@ button:hover{
 .form-container{
   width: 100%;
   gap: 25px;
-  padding: 25px;
-  align-items: start;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 .form-block{
-  flex: 1;
-  background-color: var(--colorWhite);
+  width: 80%;
+  background-color: var(--colorDefault);
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+.form-block button{
+  align-self: start;
+}
+
+.Images{
+  flex-direction: row;
+}
+
+#ImageBox{
+  width: 60%;
+}
+
+.main-image{
+  width: 75%;
+  height: 300px;
+  border-radius: 5px;
+  border: 1px solid var(--colorWhite);
+}
+
+.main-image img{
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
+.addImage{
+  flex-direction: row;
+  padding: 5px 0;
 }
 
 .Images img{
-  width: 200px;
+  width: 120px;
+  border-radius: 5px;
+}
+
+.Images div{
+  gap: 10px;
 }
 
 
+/*LIST*/
+.list{
+  height: 80%;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
 
-
+.table-row{
+  width: 100%;
+}
 
 
 
@@ -235,22 +395,38 @@ button:hover{
 .LoginPage{
   width: 100%;
   height: 100vh;
-  background: linear-gradient(0deg, var(--colorBlue), var(--colorWhite));
+  background: linear-gradient(80deg, var(--colorBlue), var(--colorGray));
   justify-content: center;
 }
 .loading{
-  height: 60px;
-  width: 60px;
+  border: 6px solid rgba(0, 0, 0, 0.1); /* Světlejší šedá s průhledností */
+  border-top: 8px solid var(--colorBlue); /* Modrá barva */
   border-radius: 50%;
-  border-bottom: 3px solid var(--colorBlue);
-  border-top: 3px solid var(--colorBlue);
-  animation: spin 1s linear infinite;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s ease-in-out infinite; /* Hladší animace */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
+
+
+
+/* Klíčové snímky animace rotace */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); /* Počáteční rotace */
+  }
+  100% {
+    transform: rotate(360deg); /* Konec rotace */
+  }
+}
+
+
 .loadingPage{
   width: 100vw;
   height: 100vh;
   justify-content: center;
   align-items: center;
+  background-color: var(--colorGray);
 }
 @keyframes spin {
   100% {
@@ -261,7 +437,7 @@ button:hover{
 .LoginDiv{
   width: 35%;
   aspect-ratio: 16/15;
-  background-color: var(--colorWhite);
+  background-color: var(--colorDefault);
   border-radius: 25px;
   flex-direction: column;
   justify-content: center;
@@ -305,15 +481,15 @@ button:hover{
   padding: 0;
 }
 
+/*NAVBAR*/
 nav{
   width: 100%;
-  box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
   justify-content: space-between;
   height: 100px;
   padding: 0px 25px;
-  z-index: 2;
-  position: absolute;
-  background-color: var(--colorWhite);
+  z-index: 3;
+  position: fixed;
+  background-color: var(--colorDefault);
 }
 
 nav img{
@@ -328,14 +504,10 @@ nav ul{
   gap: 25px;
 }
 .logo{
-  font-size: 14px;
+  font-size: 20px;
   color: var(--colorWhite);
-  font-weight: 500;
-  font-style: italic;
+  font-weight: 800;
   text-align: center;
-  background-color: var(--colorBlue);
-  border-radius: 15px 0px 15px 0px;
-  padding: 10px;
 }
 nav ul li a{
   color: var(--colorBlack);
@@ -343,27 +515,40 @@ nav ul li a{
   font-weight: 600;
 }
 
-.nav-logo{
-  gap: 20px;
+.profile-container{
+  justify-content: center;
+  align-items: center;
 }
-.navAcc{
-  gap: 10px;
-}
-.navAcc span{
-  padding:  5px 14px;
+
+.profile-container span{
+  padding: 5px 15px;
   background-color: var(--colorBlue);
-  border-radius: 50%;
-  color: var(--colorWhite);
-  font-size: 15px;
-  font-weight: 700;
-}
-.navAcc p{
-  font-size: 15px;
+  border-radius: 50px;
+  position: relative;
   font-weight: 500;
+  font-size: 16px;
+  left: 20px;
 }
-.navAcc img{
-  height: 25px;
-  border-radius: 0;
+
+.connect{
+  width: 20px;
+  height: 20px;
+  background-color: var(--colorBlue);
+  position: relative;
+  left: 10px;
+}
+
+.profile{
+  height: 50px;
+  width: 50px;
+  background-color: var(--colorBlue);
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.profile img{
+  height: 75%;
+  filter: invert(100%);
 }
 
 .menu{
@@ -383,27 +568,34 @@ nav ul li a{
 /*aside*/
 aside{
   position: fixed;
-  top: 100px;
   left: 0;
   width: 300px;
   height: 100%;
-  padding-top: 20px;
+  padding-top: 120px;
   box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
   z-index: 2;
-  background-color: var(--colorBlue);
+  background-color: var(--colorDefault);
   flex-direction: column;
+  justify-content: start;
 }
 aside ul{
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 10px;
   list-style: none;
-  padding-top: 25px;
+  margin-top: 20px;
+  padding-top: 5px;
+  width: 100%;
+}
+
+aside ul:last-child{
+  border-top: 1px solid var(--colorWhite);
+  margin-top: 70px;
 }
 
 aside ul li{
   width: 100%;
-  padding-left: 25px;
+  padding: 10px 25px;
 }
 
 aside ul li img{
@@ -414,7 +606,7 @@ aside ul li span{
   justify-content:start;
   align-items: center;
   gap: 10px;
-  color: var(--colorWhite);
+  color: white;
   font-size: 15px;
   font-weight: 600;
 }
@@ -423,7 +615,7 @@ aside ul li span:hover{
 }
 .asideLogoDiv{
   width: 100%;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 1px solid var(--colorWhite);
   gap: 10px;
   font-size: 18px;
 }
@@ -439,25 +631,20 @@ aside ul li span:hover{
   height: 22px;
 }
 
-.togleAsideLink{
-  background-color: var(--colorBlue);
-  padding: 10px 0px 10px 25px;
+
+.aside ul li.active {
+  background-color: var(--colorBlue); 
   color: white;
+  border-radius: 0px;
+  transition: 0.2s;
 }
 
-.togleAsideLink a{
-  color: white;
-}
-
-.togleAsideLink img{
-  filter: invert(100%);
-}
 
 .Content{
   position: absolute;
   background-color: var(--colorGray);
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   z-index: 1;
   padding: 100px 30px 30px 330px;
   display: flex;
@@ -471,7 +658,7 @@ aside ul li span:hover{
   width: 400px;
   aspect-ratio: 9/13;
   box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
-  background-color: var(--colorWhite);
+  background-color: var(--colorDefault);
   justify-content: center;
   align-items: center;
   flex-direction: column;
@@ -531,113 +718,127 @@ padding: 50px;
   gap: 15px;
 }
 
-
+/*HEADER-----------------*/
 .ProductPageNav{
   width: 100%;
-  background-color: var(--colorBlue);
   flex-direction: column;
   justify-content: start;
   align-items: start;
+  border-radius: 5px;
+  gap: 5px;
 }
 
 .StockPageNav{
   width: 100%;
-  background-color: var(--colorBlue);
+  background-color: var(--colorDefault);
   flex-direction: column;
   padding: 20px 30px;
+  border-radius: 5px;
 }
 
 .ProductPageNavTitles{
   justify-content: space-between;
-  align-items: start;
-  padding: 20px 30px;
-  width: 80%;
+  align-items: center;
+  padding: 0px 10px;
+  width: 100%;
+  border-radius: 5px;
+  border-bottom: 2px solid var(--colorBlue);
+  background-color: var(--colorDefault);
+  margin-bottom: 2px;
 }
 
 .ProductPageNavTitles span{
-  font-size: 15px;
+  font-size: 13px;
   font-weight:600;
   color: var(--colorWhite);
+  flex: 1;
+  text-align: center;
 }
 
 .searchbarHeader{
   width: 100%;
-  background-color: var(--colorBlue);
-  padding: 15px 30px;
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.05);
-  border-top: 1px solid rgb(241, 241, 241);
+  border-radius: 5px;
+  justify-content: space-between;
+  background-color: var(--colorDefault);
+  padding: 10px;
 }
 
-.searchbarHeader label{
-  color: var(--colorWhite);
-  font-weight: 700;
+.searchbarInputs{
+  height: 100%;
+  gap: 15px;
+  align-items: center;
+  justify-content: start;
 }
-
 .searchbarHeader input{
-  width: 100%;
-  height: 30px;
+  width: 300px;
   border: none;
-  border-radius: 25px;
+  border-radius: 5px;
   padding-left: 15px;
 }
 
-.searchbarHeader input:focus{
- border: none;
- outline: none;
+.searchbarHeader select{
+  width: 300px;
+  border: none;
 }
 
+
 .searchbarContainer{
-  width: 15%;
+  width: 250px;
   gap: 5px;
-  min-width: 200px;
   background-color: var(--colorWhite);
-  border-radius: 25px;
+  border-radius: 5px;
   padding-right: 15px;
   height: 35px;
+  margin-right: 15px;
+  box-shadow: 2px 2px 2px rgba(0,0,0,0.05);
 }
 
 .searchbarContainer img{
   height: 20px;
 }
 
-.Products{
-  height: 80%;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  overflow-y: scroll;
-  border-radius: 0px 0px 25px 25px;
-  padding: 15px 0px;
-}
-
+/*PRODUCT COMPONENT-----------------------------------------*/
 .Product{
   width: 100%;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  padding: 0px 10px;
-  background-color: var(--colorWhite);
-  height: 80px;
-  box-shadow: 0px 8px 5px rgba(0,0,0,0.02);
-  border-left: 5px solid var(--colorBlue);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  padding: 0px 10px 0px 10px;
+  background-color: var(--colorDefault);
+  height: 70px;
+  border-radius: 5px;
+  border-left: 2px solid var(--colorBlue);
 }
 .ProductContainer{
-  justify-content: space-between; 
-  gap: 25px;
-  height: 80px;
-  width: 100%;
+  justify-content: center; 
+  align-items: center;
+  height: 100%;
+  width: 95%;
 }
 .ProductName{
   height: 100%;
-  gap: 10px;
+  flex: 1;
+  margin-left: 3px;
+  justify-content: start;
+  align-items: center;
+  gap: 15px;
+}
+
+
+.Product h3{
+  color: var(--colorBlue);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
 }
 
 .Product span{
-  color: black;
+  color: var(--colorWhite);
   font-size: 14px;
   font-weight: 400;
   flex: 1;
-  display: flex;
+  text-align: center;
 }
+
 .ProductName{
   flex: 1; 
 }
@@ -647,8 +848,14 @@ padding: 50px;
   font-size: 15px;
 }
 .Product img{
-  height: 100%;
+  height: 85%;
   width: auto;
+  border-radius: 5px;
+}
+
+.products_icons img{
+  filter: invert(100%);
+  height: 25px;
 }
 
 .Product img:hover{
@@ -663,70 +870,37 @@ padding: 50px;
 
 /*Products*/
 /*Add product*/
-.ProductSideBar{
-  width: 230px;
-  height: 300px;
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.1);
-  border-radius: 30px;
-  flex-direction: column;
-  justify-content: center;
-  background-color: var(--colorWhite);
-  min-width: 220px;
-}
 
-.ProductSideBar ul{
-  gap: 30px;
-  list-style: none;
-  flex-direction: column;
-  align-items: start;
-}
-
-.ProductSideBar ul li{
-  color: var(--colorBlue);
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.ProductSideBar ul li:hover{
-  cursor: pointer;
-}
-
-
-.AddStoragePage{
-gap: 50px;  
-align-items: start;
-justify-content: center;
-align-items: center;
-}
 
 .AddProductPage{
   gap: 20px;  
   align-items: start;
-  padding: 30px;
-  width: 100%;
- 
-}
-
-.AddStoragePage h2{
-  font-size: 18px;
-  align-self: start;
-  margin-left: 30px;
-  margin-top: 15px;
-}
-.ProductInfo{
-  width: 80%;
-  height: 100%;
   flex-direction: column;
-  border-radius: 30px;
-  gap: 15px;
-  background-color: var(--colorWhite);
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.1);
+  padding: 30px 0;
+  width: 100%;
 }
 
-.ProductInfo h2{
-  padding-top: 15px;
-  color: var(--colorBlue);
+.AddProductPageContainer{
+  align-items: start;
+  gap: 20px; 
+  width: 100%;
 }
+
+
+.Stock{
+  flex-direction: column;
+  width: 100%;
+  border-radius: 15px;
+  gap: 15px;
+}
+
+.Stock h2{
+  font-weight: 800;
+  color: var(--colorBlue);
+  font-size: 16px;
+  align-self: start;
+}
+
 
 .ProductInfoForm{
   flex-direction: column;
@@ -734,86 +908,10 @@ align-items: center;
   width: 90%;
 }
 
-.inputFlex{
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  align-items: start;
-  justify-content: start;
-}
-
-.inputFlex label{
-  color: var(--colorBlue);
-  font-weight: 800;
-  font-size: 14px;
-}
-
-.inputFlex input{
-  width: 60%;
-  height: 40px;
-  padding-left: 15px;
-  border: none;
-  box-shadow: 5px 5px 5px rgba(0,0,0,0.1);
-  border-radius: 25px;
-  outline: 1px solid var(--colorDarkGray);
-}
-
-.inputFlex select{
-  width: 100%;
-  height: 40px;
-  border: none;
-  box-shadow: 5px 5px 5px rgba(0,0,0,0.1);
-  border-radius: 25px;
-  padding-left: 15px;
-  outline: 1px solid var(--colorDarkGray);
-}
-
-.inputFlex textarea{
-  width: 100%;
-  height: 130px;
-  border: none;
-  box-shadow: 5px 5px 5px rgba(0,0,0,0.1);
-  border-radius: 25px;
-  padding: 15px;
-  outline: 1px solid var(--colorDarkGray);
-}
-
-
-.productButtons{
-  align-self: flex-end;
-  gap: 30px;
-}
-.saveProductButton{
-  width: 200px;
-  height: 40px;
-  border-radius: 25px;
-  border: none;
-  background-color: var(--colorBlue);
-  color: var(--colorWhite);
-  font-size: 17px;
-  font-weight: 600;
-  align-self: flex-end;
-  margin-top: 40px;
-  margin-right: 60px;
-}
-
-.deleteProductButton{
-  width: 200px;
-  height: 40px;
-  border-radius: 25px;
-  border: none;
-  background-color: var(--colorRed);
-  color: var(--colorWhite);
-  font-size: 17px;
-  font-weight: 600;
-  align-self: flex-end;
-  margin-top: 40px;
-  display: none;
-}
 .ProductImages{
   width: 80%;
   aspect-ratio: 10/6.5;
-  background-color: var(--colorWhite);
+  background-color: var(--colorDefault);
   flex-direction: column;
   border-radius: 30px;
   gap: 40px;
@@ -847,310 +945,12 @@ align-items: center;
 }
 
 /*Category*/
-.Category{
-  width: 100%;
-  background-color: var(--colorWhite);
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.05);
-  padding: 15px;
-  justify-content: space-between;
-}
-.category_icons{
-  gap: 15px;
-}
 .products_icons{
   gap: 15px;
-}
-
-.products_icons img{
-  filter: invert(50%);
-}
-.category_icons img{
-  filter: invert(50%);
-}
-.Category h2{
-  color: var(--colorBlue);
-  font-weight: 500;
-  font-size: 18px;
-}
-
-.AddCategoryPage{
-  width: 100%;
-  height: 100%;
-}
-.CategoryPage{
-  width: 100%;
-  height: 100%;
-}
-.addButton{
-  width: 150px;
-  height: 50px;
-  color: white;
-  background-color: var(--colorBlue);
-  border: none;
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-}
-
-.addButton:hover{
-  background-color: black;
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.CategoryPageHeader{
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100px;
-}
-
-.Categories{
-  height: 70%;
-  gap: 10px;
-  width: 100%;
-  flex-direction: column;
-}
-
-.addCategoryForm{
-  width: 60%;
-  height: 90%;
-  flex-direction: column;
-  gap: 15px;
-  justify-content: center;
-  margin: 0 auto;
-  min-width: 300px;
-  border-radius: 25px;
-  padding: 15px;
-  background-color: var(--colorWhite);
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.1);
-  min-width: 300px;
-}
-
-.addCategoryForm h2{
-  color: var(--colorBlue);
-}
-
-.addCategoryForm input{
-  border-radius: 20px;
-  padding-left: 20px;
-  outline: 1px solid var(--colorDarkGray);
-}
-
-.addCategoryForm select{
-  border-radius: 25px;
-  padding-left: 15px;
-  outline: 1px solid var(--colorDarkGray);
-}
-
-
-.addCategoryForm textarea{
-  padding: 20px;
-  border-radius: 20px;
-  outline: 1px solid var(--colorDarkGray);
-}
-
-.addProduct{
-  width: 150px;
-  height: 50px;
-  color: white;
-  background-color: var(--colorBlue);
-  border: none;
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-}
-
-.addProduct:hover{
-  background-color: var(--colorDarkGray);
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-
-/*Storage page*/
-.Storages{
-  width: 100%;
-  align-items: start;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.Storage{
-  width: 80%;
-  height: 50%;
-  background-color: var(--colorWhite);
-  box-shadow: 0px 8px 25px rgba(0,0,0,0.05);
-  flex-direction: column;
-  gap: 15px;
-  justify-content: center;
-  align-items: start;
-  border-radius: 25px;
-}
-.Storage h2{
-  color: var(--colorBlack);
-  margin-left: 35px;
-  font-size: 25px;
-}
-.StorageInfo{
-  gap: 10px;
-  justify-content: center;
-  align-items: center;
-  padding-left: 35px;
-}
-.StorageInfo label{
-  color: var(--colorBlue);
-  font-weight: 700;
-}
-
-.StorageInfo span{
-  color: var(--colorBlack);
-  font-size: 15px;
-}
-
-.editButton{
-  width: 130px;
-  height: 50px;
-  background-color: var(--colorBlue);
-  border: none;
-  color: var(--colorWhite);
-  font-weight: 700;
-  font-size: 14px;
-  align-self: flex-end;
-  display: grid;
-  place-items: center;
-}
-
-.editButton:hover{
-  background-color: var(--colorBlack);
-  transition: 0.2s;
-  cursor: pointer;
-}
-
-.buttonsStorage{
-  justify-content: center;
-  align-items: center;
-  align-self: center;
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.deleteButton{
-  background-color: red;
-  border: none;
-  height: 50px;
-  width: 130px;
-  color: white;
-  font-weight: 800;
-}
-
-.deleteButton:hover{
-  cursor: pointer;
-}
-/*Add Storage Page*/
-.AddStoragePage{
-  width: 100%;
-  height: 100%;
-}
-.addStorageForm{
-  flex-direction: column;
-  align-items: start;
-  gap: 40px;
-  width: 100%;
-  height: 85%;
-  background-color: var(--colorWhite);
-  padding: 25px;
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.1);
-  border-radius: 25px;
-}
-
-.StorageInput{
-  width: 100%;
-  gap: 30px;
-  justify-content: center;
-}
-
-.StorageInput label{
-  color: var(--colorBlue);
-  font-weight: 500;
-  font-size: 18px;
-  width: 130px;
-}
-
-.StorageInput input{
-  width: 80%;
-  border: 1px solid var(--colorDarkGray);
-  height: 50px;
-  background-color: var(--colorGray);
-  padding: 15px;
-}
-
-
-/*Add supplier page*/
-.AddSupplierPage{
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
 }
-.supplierContainer{
-width: 80%;
-justify-content: center;
-flex-direction: column;
-gap: 25px;
-background-color: var(--colorWhite);
-padding: 30px;
-border-radius: 25px;
-box-shadow: 8px 8px 10px rgba(0,0,0,0.1);
-}
-.editInput{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 100%;
-}
 
-.editInput label{
-  color: var(--colorBlue);
-  font-size: 15px;
-  font-weight: 800;
-}
-
-.editInput input{
-  width: 100%;
-  height: 50px;
-  padding: 20px;
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.05);
-  border: none;
-  border-radius: 50px;
-  border: 1px solid var(--colorDarkGray);
-}
-
-.editInput textarea{
-  width: 100%;
-  height: 150px;
-  padding: 20px;
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.05);
-  border: none;
-  border-radius: 20px;
-  border: 1px solid var(--colorDarkGray);
-}
-
-.supplier span{
-  flex: 1;
-}
-
-.supplierHeader span{
-  flex: 1;
-  text-align: center;
-}
-
-.supplier h2 {
-  flex: 1;
-}
 
 /*Activate Page*/
 .ActivatePage{
@@ -1250,7 +1050,6 @@ select{
   height: 100%;
   flex-direction: column;
   gap: 15px;
-  overflow-y: scroll;
   align-items: start;
 }
 
@@ -1272,12 +1071,9 @@ font-weight: 700;
   width: 100%;
   height: 80%;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   padding-top: 20px;
 }
-
-
-
 
 .FullStock{
   width: 100%;
@@ -1295,7 +1091,7 @@ font-weight: 700;
   justify-content: space-between;
   align-items: center;
   width: 100%;
- background-color: var(--colorWhite);
+ background-color: var(--colorDefault);
  padding: 0px 15px 0px 0px;
  transition: 0.2s;
  box-shadow: 2px 3px 10px rgba(0,0,0,0.05);
@@ -1307,60 +1103,6 @@ font-weight: 700;
  gap: 30px;
 }
 
-.ProductStockName span{
-  color: var(--colorBlue);
-  font-weight: 700;
-  width: 30%;
-}
-.ProductStockName img{
-  height: 70px;
-  width: auto;
-}
-
-.addProductInput{
-width: 25%;
-background-color: var(--colorWhite);
-height: 100%;
-padding: 5px 25px 10px 25px;
-animation: fade 0.5s ease-in-out;
-}
-
-@keyframes fade {
-  from {
-    opacity: 0; /* Průhlednost na začátku animace */
-  }
-  to {
-    opacity: 1; /* Průhlednost na konci animace */
-  }
-}
-
-.addProductInput label{
-  color: var(--colorBlue);
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.addProductInput input{
-  color: var(--colorBlue);
-  font-size: 13px;
-  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-  border: none;
-  width: 100%;
-  height: 30px;
-  padding: 10px;
-}
-
-.stockButton{
-  width: 50px;
-  height: 40px;
-  background-color: var(--colorBlue);
-  border: none;
-  color: var(--colorWhite);
-  font-size: 20px;
-  font-weight: 500;
-  align-self: flex-end;
-}
-
 
 .StockForm{
   height: 100%;
@@ -1369,40 +1111,6 @@ animation: fade 0.5s ease-in-out;
   flex-direction: column;
   width: 50%;
   gap: 20px;
-}
-
-.inputStock{
-  width: 80%;
-  flex-direction: column;
-  align-items: start;
-  gap: 10px;
-}
-.inputStock label{
-  color: var(--colorBlue);
-  font-size: 14px;
-  font-weight: 800;
-
-}
-.inputStock select{
-  width: 100%;
-  border: none;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-  height: 40px;
-}
-
-.inputStock input{
-  width: 100%;
-  border: none;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-  height: 40px;
-}
-
-.inputStock textarea{
-  width: 100%;
-  border: none;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-  padding: 15px;
-  height: 200px;
 }
 
 
@@ -1454,45 +1162,30 @@ height: 62px;
   align-items: start;
 }
 
-.PositonCard{
-  width: 250px;
-  height: 250px;
-  background-color: var(--colorBlue);
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.PositonCard img{
-  filter: invert(100%);
-}
-
-.PositonCard span{
-  color: var(--colorWhite);
-  font-size: 40px;
-}
-
-
 
 /*StockInPage*/
-.StockInCard{
+.StockCard{
   width: 100%;
   height: 70px;
-  background-color: var(--colorWhite);
+  background-color: var(--colorDefault);
   justify-content: space-between;
-  padding: 0px 15px;
-  box-shadow: 8px 8px 10px rgba(0,0,0,0.05);
-  gap: 15px;
+  padding: 0px 10px;
+  border-radius: 5px;
 }
 
-.stockinName{
-  color: var(--colorBlue);
-  font-weight: 700;
+.StockCard span{
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
 }
 
-.StockInCard img{
-  height: 35px;
+.stockInfoImg{
+  flex: 1;
+  justify-content: center;
+}
+
+.StockCard img{
+  height: 30px;
 }
 
 
@@ -1527,250 +1220,5 @@ height: 62px;
   font-size: 10px;
   padding: 15px 20px;
 }
-.MovesContainer{
-  flex-direction: column;
-  gap: 15px;
-  width: 50%;
-}
-
-.MovesItems{
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
 
 
-@media only screen and (max-width: 1000px) {
-  .menu{
-    display: flex;
-  }
-  .logo{
-    display: none;
-  }
-  .nav-logo ul{
-    display: none;
-  }
-  .Content{
-    padding: 100px 5px 0px 5px;
-    min-height: 100vh;
-  }
-
-  .Storage{
-    width: 90%;
-    height: 70%;
-  }
-  .addStorageForm{
-    width: 95%;
-    height: 90%;
-    gap: 25px;
-  
-  }
-  .ProductImages{
-    height: 90%;
-    width: 100%;
-  }
-
-  .Moves{
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .MovesContainer{
-    width: 100%;
-  }
-  .addCategoryForm{
-    width: 95%;
-    height: 93%;
-  }
-  .addCategoryForm h2{
-    font-size: 20px;
-  }
-  .StorageInput{
-    width: 100%;
-  }
-
-  .supplierContainer{
-    width: 97%;
-   margin-top: 150px;
-  }
-
-  .StorageInput input{
-    height: 40px;
-  }
-
-  .StorageInput label{
-    font-size: 16px;
-    font-weight: 600;
-  }
-  .ProductPage{
-    width: 100%;
-  }
-  .Product span{
-    justify-content: center;
-    align-items: center;
-  }
-  .products_icons{
-    display: none;
-  }
-
-  aside{
-    display: none;
-    flex-direction: column;
-    animation: fade 0.3s ease-in-out;
-    width: 100%;
-  }
-
-  .deleteProductButton{
-    display: block;
-  }
-
-
-  .AddProductPage{
-    flex-direction: column;
-    width: 100%;
-    padding: 10px 5px;
-    gap: 25px;
-    background-color: var(--colorGray);
-  }
-.productButtons{
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-}
-.saveProductButton{
-  margin-right: 0px;
-}
-  .ProductSideBar{
-    width: 100%;
-    padding: 50px 0px;
-  }
-  .ProductInfo{
-    width: 100%;
-    padding: 20px 0px;
-    height: auto;
-  }
-.StockProducts{
-  width: 100%;
-}
-.FullStockProduct{
-  height: 70px;
-}
-.FullStockProduct img{
-  height: 50px;
-}
-  .StorckProductsEdit{
-    flex-direction: column;
-    height: auto;
-    gap: 50px;
-  }
-  .ProductStockName{
-    width: auto;
-    gap: 10px;
-  }
-  .ProductPageNavTitles{
-    width: 100%;
-  }
-  .ProductStockName span{
-    font-size: 14px;
-  }
-  .StockForm{
-    width: 100%;
-    padding: 0;
-    background-color: var(--colorGray);
-    padding-bottom: 50px;
-  }
-  .StockPageNav{
-    padding: 20px 10px;
-  }
-  .inputStock{
-    width: 100%;
-  }
-  .movements_flex{
-    flex-direction: column;
-    gap: 25px;
-  }
-  .StockInCard{
-    font-size: 13px;
-    padding: 5px;
-  }
-  .StockInCard img{
-    height: 25px;
-  }
-  .StockInCard span:last-child{
-    display: none;
-  }
-  .stock{
-    height: auto;
-  }
-  .Categories{
-    height: auto;
-    background-color: var(--colorGray);
-  }
-
-  .addProductInput{
-    width: auto;
-    padding: 3px 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: end;
-  }
-
-  .addProductInput label{
-    align-self: center;
-  }
-
-  .addProductInput input{
-    width: 80%;
-  }
-
-  .stockButton{
-    height: 35px;
-    width: 45px;
-  }
-
-  .Category img{
-    height: 27px;
-  }
-  .supplier span{
-    display: none;
-  }
-  .supplierHeader{
-    display: none;
-  }
-  @keyframes fade {
-    from {
-      opacity: 0; /* Průhlednost na začátku animace */
-    }
-    to {
-      opacity: 1; /* Průhlednost na konci animace */
-    }
-  }
-}
-
-
-@media only screen and (max-width: 600px) {
-  .Product{
-    height: 65px;
-    gap: 10px;
-  }
-  .Product span{
-    font-size: 13px;
-    font-weight: 400;
-  }
-
-  .Product img:first-child{
-    height: 40px;
-  }
-
-  .Product img:last-child{
-    height: 25px;
-  }
-  .inputFlex{
-    width: 100%;
-  }
-
-  .inputFlex input{
-    width: 100%;
-  }
-
-}

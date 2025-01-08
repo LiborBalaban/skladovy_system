@@ -1,4 +1,5 @@
 import '../App.css';
+import '../responsive.css';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddSupplierForm from '../components/forms/AddSupplierForm';
@@ -22,7 +23,7 @@ const AddSupplierPage = () => {
  
 
   return (
-    <div className="AddSupplierPage flex">
+    <div className="page flex">
        <AddSupplierForm onSubmit={handleSupplierSave} data = {supplier}/>
     </div>
   );

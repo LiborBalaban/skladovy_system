@@ -1,53 +1,15 @@
 import '../App.css';
-import logo from '../Images/logo.png';
 import logoutIcon from '../Images/logout.png';
+import ProfileUser from '../Images/profile-user.png';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import Cookies from 'universal-cookie';
 import { useUser } from '../context/UserContext';
 
 const Navbar =()=> {
   const history = useNavigate();
-  const [email, setEmail] = useState("");
-  const cookies = new Cookies();
-  
-
-  const { role } = useUser();
-  useEffect(() => {
-  loadEmail();
-}, []);
-
-
-const loadEmail = async () => {
-  try {
-    const response = await fetch("http://localhost:5000/get-useremail", {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error('Nepodařilo se načíst email uživatele.');
-    }
-
-    const data = await response.json();
-    const { documents } = data;
-    setEmail(documents);
-  } catch (error) {
-    console.error('Chyba při načítání emailu:', error);
-  }
-}
-
-
-const logout = () => {
-  cookies.remove("token", { path: "/" });
-  history('/login');
-};
-
+  const { user } = useUser();
+ 
 let indexMenu = 0;
 const menu = () =>{
   indexMenu++;
@@ -61,7 +23,6 @@ const menu = () =>{
   }
 }
 
-  
   return (
    
       <nav className = "flex">
@@ -71,17 +32,18 @@ const menu = () =>{
           <span></span>
           <span></span>
         </div>
-        <span className='logo'>Storage <br /> app</span>
-        <ul className = "flex">
-            <li><a href="">Úvodní stránka</a></li>
-            <li><a href="">Eshop</a></li>
-        </ul>
+        <span className='logo'>Warehouse App</span>
         </div>
         <div className = "flex navAcc" >
-          <span>{role}</span>
-            <span>{email.charAt(0).toLocaleUpperCase()}</span>
-            <p>{email}</p>
-            <img src={logoutIcon} alt="" onClick={logout}/>
+          <div className='profile-container flex'>
+          <span>{user}</span>
+          <div className='connect'>
+
+          </div>
+          <div className='profile flex'>
+            <img src={ProfileUser} alt="" />
+          </div>
+          </div>
         </div>
       </nav>
  

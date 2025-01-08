@@ -1,4 +1,5 @@
 import '../App.css';
+import '../responsive.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -18,7 +19,7 @@ const AddEmployeePage = () => {
     
 
   return (
-    <div className="AddSupplierPage flex">
+    <div className="page flex">
      <AddEmployeeForm onSubmit={handleAddEmployee} data={user}/>   
     </div>
   );

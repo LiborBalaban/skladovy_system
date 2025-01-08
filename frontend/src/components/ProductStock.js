@@ -3,25 +3,19 @@ import StockInfo from './StockInfo';
 
 const ProductStock = ({ data }) => {
 
-  const formatDate = (isoDate) => {
-    const dateObj = new Date(isoDate);
-    return dateObj.toLocaleString('cs-CZ', {
-      timeZone: 'UTC',
-      hour12: false  
-    });
-  };
-
   return (
-    <div className='flex Stock'>
+    <div className='flex list'>
+     <h2>Pohyby produktu</h2>
       {
         data.map((move, index) => {
           return (
             <StockInfo
               key={index}
               user={move.movement.user.name}
-              date={formatDate(move.movement.date)} // Použití funkce pro formátování data
+              date={move.movement.date} // Použití funkce pro formátování data
               count={move.quantity + ' ks'}
               storage={move.storage.name}
+              type={move.movement.typeId}
             />
           )
         })

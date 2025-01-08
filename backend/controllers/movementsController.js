@@ -1,54 +1,99 @@
 const prisma = require('../databaze/prisma');
 
-exports.getAllMovements = async(req, res) => {
-   try {
-           const userId = req.user.id;
-           
-           const user = await userModel.findOne({_id: userId})
-               .populate({
-                   path: 'storage',
-                   populate: {
-                       path: 'stockin',
-                       model: 'Product_Stock',
-                       populate: {
-                           path: 'stockin',
-                           model: 'StockIn',
-                           populate: {
-                               path: 'supplier',
-                               model: 'Supplier'
-                           }
-                       }
-                   }
-               }) .populate({
-                   path: 'storage',
-                   populate: {
-                       path: 'stockin',
-                       model: 'Product_Stock',
-                       populate: {
-                           path: 'product',
-                           model: 'Product',
-                       }
-                   }
-               })
-           
-           if (!user) {
-               return res.status(404).json({ msg: "Uživatel nebyl nalezen." });
-           }
-   
-           const stockin = user.storage.stockin;
-   
-           return res.json({
-               msg: "Úspěšně se nám podařilo získat naskladnění",
-               documents: stockin
-           });
-       } catch (error) {
-           console.error("Chyba při získávání naskladnění:", error);
-           return res.status(500).json({
-               msg: "Bohužel nedošlo k získání naskladnění",
-               documents: []
-           });
-       }
-};
+exports.getAllMovements = async (req, res) => {
+    try {
+      const companyId = req.user.companyId;
+  
+      const movements = await prisma.stockMovement.findMany({
+        where: {
+          user: {
+            companyId: companyId,
+          },
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+          supplier:{
+            select:{
+                name:true
+            }
+          },
+          storage:{
+            select:{
+                name:true
+            }
+          },
+          stockTransaction:{
+            select:{
+                id:true
+            }
+          }
+        },
+      });
+  
+      return res.json({
+        message: "Úspěšně se nám podařilo získat pohyby uživatelů",
+        documents: movements,
+      });
+    } catch (error) {
+      console.error("Chyba při získávání pohybů:", error);
+      return res.status(500).json({
+        message: "Bohužel nedošlo k získání pohybů",
+        documents: [],
+      });
+    }
+  };
+
+  exports.getMovementsByUser = async (req, res) => {
+    try {
+      const userId = req.user.id;
+      
+      const movements = await prisma.stockMovement.findMany({
+        where: {
+          user: {
+            id:userId
+          },
+        },
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+          supplier:{
+            select:{
+                name:true
+            }
+          },
+          storage:{
+            select:{
+                name:true
+            }
+          },
+          stockTransaction:{
+            select:{
+                id:true
+            }
+          }
+        },
+      });
+  
+      return res.json({
+        message: "Úspěšně se nám podařilo získat pohyby uživatelů",
+        documents: movements,
+      });
+    } catch (error) {
+      console.error("Chyba při získávání pohybů:", error);
+      return res.status(500).json({
+        message: "Bohužel nedošlo k získání pohybů",
+        documents: [],
+      });
+    }
+  };
+
 
 exports.getProductStock = async(req, res) => {
     try {
@@ -65,7 +110,21 @@ exports.getProductStock = async(req, res) => {
                 include: {
                   movement: {
                     include: {
-                      user: true,
+                      user: {
+                        select:{
+                          name:true
+                        }
+                      },
+                      supplier:{
+                        select:{
+                          name:true
+                        }
+                      },
+                      storage:{
+                        select:{
+                          name:true
+                        }
+                      }
                     },
                   },
                   storage: true,
@@ -85,6 +144,57 @@ exports.getProductStock = async(req, res) => {
         }
  };
 
+ exports.getProductStockStorage = async(req, res) => {
+  try {
+          const productId = req.params.productId;
+          const storageId = req.user.storageId;
+          if(!productId){
+              return res.json({
+                  message: "Chybí produkt ID"
+              }); 
+          }
+          const product_stocks = await prisma.stockTransaction.findMany({
+              where: {
+                productId: parseInt(productId),
+                storageId: storageId
+              },
+              include: {
+                movement: {
+                  include: {
+                    user: {
+                      select:{
+                        name:true
+                      }
+                    },
+                    supplier:{
+                      select:{
+                        name:true
+                      }
+                    },
+                    storage:{
+                      select:{
+                        name:true
+                      }
+                    }
+                  },
+                },
+                storage: true,
+              },
+            });
+          
+          return res.json({
+              message: "Úspěšně se nám podařilo získat naskladnění",
+              documents: product_stocks
+          });
+      } catch (error) {
+          console.error("Chyba při získávání naskladnění:", error);
+          return res.status(500).json({
+              message: "Bohužel nedošlo k získání naskladnění",
+              documents: []
+          });
+      }
+};
+
 
 exports.createMovement = async(req, res) => {
    try {
@@ -95,7 +205,7 @@ exports.createMovement = async(req, res) => {
           if(storageId){
             storage = storageId;
           }
-          const { type, products} = req.body;
+          const { typeMovement, products} = req.body;
           const { stockStorageId, stockSupplierId, stockDescription, stockNumber,} = req.body.stockDetails;
 
           if(stockStorageId){
@@ -106,7 +216,7 @@ exports.createMovement = async(req, res) => {
             data:{
                 userId:userId,
                 storageId:parseInt(storage),
-                typeId:parseInt(type),
+                typeId:parseInt(typeMovement),
                 date: new Date(),
                 supplierId:parseInt(stockSupplierId),
                 description:stockDescription,
@@ -129,27 +239,26 @@ exports.createMovement = async(req, res) => {
               
               const Stock = await prisma.stock.findFirst({
                 where:{
-                    productId:parseInt(id)
+                    productId:parseInt(id),
+                    storageId:parseInt(storage)
                 }
               })
 
               if(Stock){
                 const updateStock = await prisma.stock.update({
-                    where:{
-                        productId:parseInt(id)
-                    },
-                    data:{
-                        quantity: {
-                            increment: type === 2 ? -parseInt(quantity) : parseInt(quantity),
-                        },
+                    where: { id: Stock.id }, // `id` z dříve získaného záznamu
+                    data: {
+                      quantity: {
+                        increment: typeMovement === 2 ? -parseInt(quantity) : parseInt(quantity),
+                      },
                     }
-                })
+                  });
               } else{
                 const createStock = await prisma.stock.create({
                     data:{
                         storageId:parseInt(storage),
                         productId: parseInt(id),
-                        quantity: type === 2 ? -parseInt(quantity) : parseInt(quantity),
+                        quantity: typeMovement === 2 ? -parseInt(quantity) : parseInt(quantity),
                     }
                 })
               }

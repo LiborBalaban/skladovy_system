@@ -1,4 +1,5 @@
 import '../App.css';
+import '../responsive.css';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { Routes, Route } from 'react-router-dom';
@@ -27,13 +28,9 @@ const FullApp = () => {
         <Routes>
           <Route path='/products' element={<ProductPage />} />
           <Route path='/order' element={<OrderPage />} />
-          <Route path='/category' element={<CategoryPage />} />
-          <Route path='/addcategory' element={<AddCategoryPage />} />
-          <Route path='/addcategory/:id' element={<AddCategoryPage />} />
           <Route path='/add-product' element={<AddProductPage />} />
           <Route path='/add-product/:id' element={<AddProductPage />} />
           <Route path='/stock' element={<StockPage />} />
-          <Route path='/positions' element={<PositionPage />} />
           <Route path='/movements' element={<MovementsPage />} />
           <Route path='/stockout' element={<StockOutPage />} />
         </Routes>

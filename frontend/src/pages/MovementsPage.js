@@ -1,79 +1,42 @@
 import '../App.css';
-import Stockin from '../components/Stockin';
-import StockOut from '../components/stockOut';
+import '../responsive.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
+import StockInfo from '../components/StockInfo';
+import useData from '../hooks/loadData';
+import List from '../components/List';
+import { useUser } from '../context/UserContext';
 const MovementsPage = () => {
-  const history = useNavigate();
-  const [stockin, setStockin] = useState([]);
-  const [stockout, setStockout] = useState([]);
+  const [all_movements, setAllMovements] = useState([]);
+  const { data: movements, loading, error } = useData('http://localhost:5000/get-all-movements');
+  const { data: user_movements} = useData('http://localhost:5000/get-user-movements');
+  const { role } = useUser();
+ const HeaderTitles = [
+  {name:'Zaměstnanec'},
+  {name:'Počet položek'},
+  {name:'Dodavatel'},
+  {name:'Datum'},
+  {name:'Typ'},
+  {name:'Sklad'},
+]
 
- useEffect(()=>{
-    loadStockin();
-    loadStockOut();
- }, [])
-  
-
-
-  const loadStockin = async () =>{
-    try {
-      const response = await axios.get("http://localhost:5000/get-stockin", { withCredentials: true });
-      const stockins = response.data.documents;
-      setStockin(stockins);
-      
-    } catch{
-      console.error("Chyba při získávání dodavatelů");
+useEffect(() => {
+    if (role === 3) {
+      setAllMovements(movements);
     }
-  }
-
-  
-  const loadStockOut = async () =>{
-    try {
-      const response = await axios.get("http://localhost:5000/get-stockout", { withCredentials: true });
-      const stockouts = response.data.documents;
-      setStockout(stockouts);
-      
-    } catch{
-      console.error("Chyba při získávání dodavatelů");
+    else{
+      setAllMovements(user_movements);
     }
-  }
-
+  }, [movements, user_movements]);
 
   return (
-    <div className="CategoryPage">
-        <div className='CategoryPageHeader'>
+    <div className="page">
+        <div className='page-header'>
         <h2>Pohyby produktů</h2>
         </div>
-        <div className='flex movements_flex'>
-        <div className='Categories stock flex'>
-        <div className='StockHeader'>
-        <h2>Naskladnění</h2>
+        <List type={'moves'} data={all_movements} titles={HeaderTitles}/>
         </div>
-        {
-          stockin.map((stockin, index) =>{
-            return(
-            <Stockin name = {stockin.product.name} code = {stockin.product.code} quantity = {stockin.quantity} date={new Date(stockin.stockin.date).toLocaleString().slice(0,11)} supplier = {stockin.stockin.supplier.name}/>
-            )
-          })
-        }
-        </div>
-        <div className='Categories stock flex'>
-        <div className='StockHeader'>
-        <h2>Vyskladnění</h2>
-        </div>
-        {
-          stockout.map((stockout, index) =>{
-            return(
-            <StockOut name = {stockout.product.name} code = {stockout.product.code} quantity = {stockout.quantity} date={new Date(stockout.stockout.date).toLocaleString().slice(0,11)} description = {stockout.stockout.description} />
-            )
-          })
-        }
-        </div>
-        </div>
-        
-    </div>
   );
 }
 

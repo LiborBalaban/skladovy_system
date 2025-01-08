@@ -1,4 +1,5 @@
 import '../App.css';
+import '../responsive.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -14,7 +15,6 @@ const { loginUser } = useUser();
 
 const handleLogin = async(formData) => {
         const result = await postData('http://localhost:5000/login-user', formData);
-        loginUser(result);
         goTo('/fullapp');
       };
 

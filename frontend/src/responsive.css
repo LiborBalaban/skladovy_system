@@ -1,0 +1,234 @@
+@media only screen and (max-width: 1000px) {
+    .menu{
+      display: flex;
+    }
+    .logo{
+      display: none;
+    }
+    .nav-logo ul{
+      display: none;
+    }
+    .Content{
+      padding: 100px 5px 0px 5px;
+      min-height: 100vh;
+    }
+  
+    .Storage{
+      width: 90%;
+      height: 70%;
+    }
+    .addStorageForm{
+      width: 95%;
+      height: 90%;
+      gap: 25px;
+    
+    }
+    .ProductImages{
+      height: 90%;
+      width: 100%;
+    }
+  
+    .Moves{
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .MovesContainer{
+      width: 100%;
+    }
+    .addCategoryForm{
+      width: 95%;
+      height: 93%;
+    }
+    .addCategoryForm h2{
+      font-size: 20px;
+    }
+    .StorageInput{
+      width: 100%;
+    }
+  
+    .supplierContainer{
+      width: 97%;
+     margin-top: 150px;
+    }
+  
+    .StorageInput input{
+      height: 40px;
+    }
+  
+    .StorageInput label{
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .ProductPage{
+      width: 100%;
+    }
+    .Product span{
+      justify-content: center;
+      align-items: center;
+    }
+    .products_icons{
+      display: none;
+    }
+  
+    aside{
+      display: none;
+      flex-direction: column;
+      animation: fade 0.3s ease-in-out;
+      width: 100%;
+    }
+  
+    .deleteProductButton{
+      display: block;
+    }
+  
+  
+    .AddProductPage{
+      flex-direction: column;
+      width: 100%;
+      padding: 10px 5px;
+      gap: 25px;
+      background-color: var(--colorGray);
+    }
+  .productButtons{
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  .saveProductButton{
+    margin-right: 0px;
+  }
+    .ProductSideBar{
+      width: 100%;
+      padding: 50px 0px;
+    }
+    .ProductInfo{
+      width: 100%;
+      padding: 20px 0px;
+      height: auto;
+    }
+  .StockProducts{
+    width: 100%;
+  }
+  .FullStockProduct{
+    height: 70px;
+  }
+  .FullStockProduct img{
+    height: 50px;
+  }
+    .StorckProductsEdit{
+      flex-direction: column;
+      height: auto;
+      gap: 50px;
+    }
+    .ProductStockName{
+      width: auto;
+      gap: 10px;
+    }
+    .ProductPageNavTitles{
+      width: 100%;
+    }
+    .ProductStockName span{
+      font-size: 14px;
+    }
+    .StockForm{
+      width: 100%;
+      padding: 0;
+      background-color: var(--colorGray);
+      padding-bottom: 50px;
+    }
+    .StockPageNav{
+      padding: 20px 10px;
+    }
+    .inputStock{
+      width: 100%;
+    }
+    .movements_flex{
+      flex-direction: column;
+      gap: 25px;
+    }
+    .StockInCard{
+      font-size: 13px;
+      padding: 5px;
+    }
+    .StockInCard img{
+      height: 25px;
+    }
+    .StockInCard span:last-child{
+      display: none;
+    }
+    .stock{
+      height: auto;
+    }
+    .Categories{
+      height: auto;
+      background-color: var(--colorGray);
+    }
+  
+    .addProductInput{
+      width: auto;
+      padding: 3px 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: end;
+    }
+  
+    .addProductInput label{
+      align-self: center;
+    }
+  
+    .addProductInput input{
+      width: 80%;
+    }
+  
+    .stockButton{
+      height: 35px;
+      width: 45px;
+    }
+  
+    .Category img{
+      height: 27px;
+    }
+    .supplier span{
+      display: none;
+    }
+    .supplierHeader{
+      display: none;
+    }
+    @keyframes fade {
+      from {
+        opacity: 0; /* Průhlednost na začátku animace */
+      }
+      to {
+        opacity: 1; /* Průhlednost na konci animace */
+      }
+    }
+  }
+  
+  
+  @media only screen and (max-width: 600px) {
+    .Product{
+      height: 65px;
+      gap: 10px;
+    }
+    .Product span{
+      font-size: 13px;
+      font-weight: 400;
+    }
+  
+    .Product img:first-child{
+      height: 40px;
+    }
+  
+    .Product img:last-child{
+      height: 25px;
+    }
+    .inputFlex{
+      width: 100%;
+    }
+  
+    .inputFlex input{
+      width: 100%;
+    }
+  
+  }

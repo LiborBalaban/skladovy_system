@@ -1,39 +1,58 @@
 const prisma = require('../databaze/prisma');
 
 
-exports.getProductsByCompany= async(req, res) => {
-  
+exports.getProductsByCompany = async (req, res) => {
     try {
-        const companyId = req.user.companyId;
-        const products = await prisma.product.findMany({
-            where: {
-             companyId:companyId
+      const companyId = req.user.companyId;
+  
+      // Získání produktů a jejich celkového množství
+      const products = await prisma.product.findMany({
+        where: {
+          companyId: companyId,
+        },
+        include: {
+          category: true,
+          position: true,
+          images: {
+            take: 1, // Vrátí pouze první obrázek
+          },
+          stocks: {
+            select: {
+              productId: true, // Abychom mohli agregovat podle productId
+              quantity: true, // Pro výpočet součtu
             },
-            include: {
-              category: true,
-              position: true,
-              images: {
-                take: 1, // Vrátí pouze první obrázek
-              },
-            },
-          });
-         
-        if (!products) {
-            return res.status(404).json({ message: "Produkty nebyly nalezeny." });
-        }
-        
-        return res.json({
-            message: "Úspěšně se nám podařilo získat produkty",
-            documents: products
-        });
+          },
+        },
+      });
+  
+      // Vytvoříme mapu pro součet `quantity` podle `productId`
+      const productsWithTotalQuantity = products.map((product) => {
+        const totalQuantity = product.stocks.reduce(
+          (sum, stock) => sum + stock.quantity,
+          0
+        );
+        return {
+          ...product,
+          totalQuantity, // Přidáme součet `quantity` pro daný produkt
+        };
+      });
+  
+      if (!productsWithTotalQuantity || productsWithTotalQuantity.length === 0) {
+        return res.status(404).json({ message: "Produkty nebyly nalezeny." });
+      }
+  
+      return res.json({
+        message: "Úspěšně se nám podařilo získat produkty",
+        documents: productsWithTotalQuantity,
+      });
     } catch (error) {
-        console.error("Chyba při získávání produktů:", error);
-        return res.status(500).json({
-            message: "Bohužel nedošlo k získání produktů",
-            documents: []
-        });
+      console.error("Chyba při získávání produktů:", error);
+      return res.status(500).json({
+        message: "Bohužel nedošlo k získání produktů",
+        documents: [],
+      });
     }
-};
+  };
 
 exports.getSearchedProducts= async(req, res) => {
   
@@ -65,47 +84,79 @@ exports.getSearchedProducts= async(req, res) => {
     }
 };
 
-exports.getProductsByStorage= async(req, res) => {
-  
+exports.getProductsByStorage = async (req, res) => {
     try {
-        const storageId = req.user.storageId;
+        let storageId = '';
         
+        if (req.user.storageId) {
+            storageId = req.user.storageId;
+        }
+
+        if (req.params.storageId) {
+            storageId = req.params.storageId;
+        }
+
+        if (!storageId) {
+            return res.status(400).json({ message: "Chybí ID skladu." });
+        }
+
         const products = await prisma.product.findMany({
             where: {
-             storage:storageId
+                stocks: {
+                    some: {
+                        storageId: parseInt(storageId)
+                    }
+                }
             },
             include: {
-              storage: true,
+                category: true,
+                position: true,
+                images: {
+                    take: 1, // Vrátí první obrázek
+                },
+                stocks: {
+                    where: {
+                        storageId: parseInt(storageId)
+                    },
+                    select: {
+                        quantity: true,
+                    },
+                },
             },
-            include:{
-                category:true,
-            }
-          });
-         
-        if (!products) {
+        });
+
+        if (!products || products.length === 0) {
             return res.status(404).json({ message: "Produkty nebyly nalezeny." });
         }
-        
+
+        // Přidáme `totalQuantity` jako součet všech zásob pro daný sklad a produkt
+        const productsWithQuantities = products.map(product => {
+            const totalQuantity = product.stocks.reduce((sum, stock) => sum + stock.quantity, 0);
+            return {
+                ...product,
+                totalQuantity,
+            };
+        });
+
         return res.json({
             message: "Úspěšně se nám podařilo získat produkty",
-            documents: products
+            documents: productsWithQuantities,
         });
     } catch (error) {
         console.error("Chyba při získávání produktů:", error);
         return res.status(500).json({
             message: "Bohužel nedošlo k získání produktů",
-            documents: []
+            documents: [],
         });
     }
 };
-
 exports.getProductDetail= async(req, res) => {
     const productId = req.params.productId;
     try {
         const product = await prisma.product.findUnique({
             where: {
              id:parseInt(productId)
-            }
+            },
           });
          
         if (!product) {
@@ -167,7 +218,7 @@ exports.createProduct = async(req, res) => {
 
 exports.updateProduct = async(req, res) => {
     const productId = req.params.productId;
-    const { productName, productCode, productCategoryId, productDescription, productStrageId, productQuantity, positions} = req.body;
+    const { productName, productCode, productCategoryId, productDescription, productPositionId, productQuantity} = req.body;
 
     const companyId = req.user.companyId;
 
@@ -182,14 +233,12 @@ exports.updateProduct = async(req, res) => {
             },
             data:{
                 name:productName,
-                code: productCode,
-                description: productDescription,
-                categoryId:productCategoryId,
-                storageId:productStrageId,
-                quantity:productQuantity,
-                positions:{
-                   connect: positions.map((positionId) => ({ id: positionId })),
-                }
+                 code: productCode,
+                 description: productDescription,
+                 categoryId: parseInt(productCategoryId),
+                 quantity:parseInt(productQuantity),
+                 positionId:parseInt(productPositionId),
+                 companyId:parseInt(companyId)
             },
         })
 

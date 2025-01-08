@@ -1,16 +1,15 @@
 import '../App.css';
-import Category from '../components/Category';
+import '../responsive.css';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import axios from 'axios';
-import Position from '../components/Position';
 import useData from '../hooks/loadData';
 import { postData } from '../hooks/addToDb';
 import Input from '../components/inputs/input';
 import Button from '../components/button';
 import Select from '../components/inputs/select';
 import Item from '../components/item';
+import List from '../components/List';
 
 function PositionPage() {
   const [formData, setFormData] = useState({
@@ -41,9 +40,14 @@ const handleSelect = (selectedId) => {
   const { data:storages, loading, error } = useData('http://localhost:5000/get-warehouses'); 
   const { data:positions } = useData('http://localhost:5000/get-positions'); 
   
+  const HeaderTitles = [
+    {name:'Název'},
+    {name:'Akce'},
+  ]
+  
 
   return (
-    <div className="CategoryPage PositionPage">
+    <div className="page PositionPage">
         <div className='PositionPageHeader'>
         <h2>Pozice skladů</h2>
         <div className='flex positiondAdd'>
@@ -52,16 +56,7 @@ const handleSelect = (selectedId) => {
         <Button style={'button addButton'} label={'Přidat pozici'} onClick={savePosition}/>
         </div>
         </div>
-        <div className='Positions flex'>
-        <h2>Pozice</h2>
-      {
-        positions.map(position =>{
-          return (
-            <Item name={position.name}/>
-          )
-        })
-      }
-        </div>
+        <List data={positions} type={'item'} titles={HeaderTitles}/>
     </div>
   );
 }

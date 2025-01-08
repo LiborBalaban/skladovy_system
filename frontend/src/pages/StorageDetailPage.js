@@ -21,7 +21,7 @@ const StorageDetailPage = () => {
     };
 
   return (
-    <div className="AddStoragePage flex">
+    <div className="page flex">
         <AddWarehouseForm onSubmit={handleAddWarehouse} data = {storage}/>
     </div>
   );

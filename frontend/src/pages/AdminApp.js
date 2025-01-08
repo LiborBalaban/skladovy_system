@@ -1,4 +1,5 @@
 import '../App.css';
+import '../responsive.css';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { Routes, Route } from 'react-router-dom';
@@ -8,6 +9,10 @@ import SupplierPage from './SupplierPage';
 import AddSupplierPage from './AddSupplierPage';
 import EmployeePage from './EmployeePage';
 import AddEmployeePage from './AddEmployee';
+import CompanyDetail from './CompanyDetail';
+import CategoryPage from './CategoryPage';
+import PositionPage from './PositionPage';
+import AddCategoryPage from './AddCategoryPage';
 
 const AdminApp = () => {
   return (
@@ -25,6 +30,11 @@ const AdminApp = () => {
           <Route path='/employee' element={<EmployeePage/>} />
           <Route path='/add-employee' element={< AddEmployeePage/>} />
           <Route path='/add-employee/:id' element={< AddEmployeePage/>} />
+          <Route path='/company-detail' element={<CompanyDetail/>} />
+          <Route path='/categories' element={<CategoryPage/>}/>
+          <Route path='/category' element={<AddCategoryPage/>}/>
+          <Route path='/category/:id' element={<AddCategoryPage/>}/>
+          <Route path='/positions' element={<PositionPage/>}/>
         </Routes>
       </div>
     </div>

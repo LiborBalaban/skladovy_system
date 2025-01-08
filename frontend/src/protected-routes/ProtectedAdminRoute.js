@@ -20,11 +20,11 @@ const ProtectedAdminRoute = () => {
   }, [data, loading]);
 
   if (loading) {
-    return (
-      <div className='loadingPage flex'>
-        <div className='loading'></div>
-      </div>
-    );
+      return (
+        <div className='loadingPage flex'>
+          <div className='loading'></div>
+        </div>
+      );
   }
 
   if (auth === null) {
