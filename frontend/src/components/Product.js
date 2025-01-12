@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import Input from './inputs/input';
 
-const Product = ({name, id, category, quantity, code, image, position, link}) => {
+const Product = ({name, id, category, quantity, code, image, position, link, deleteFunction}) => {
   const navigate = useNavigate();
 
   const navigateLink = () =>{
@@ -51,7 +51,7 @@ const Product = ({name, id, category, quantity, code, image, position, link}) =>
             <img src={EditButton}/>
             <span>Editovat</span>
         </Link>
-        <div  className='deleteItemButton editButton flex'>
+        <div  className='deleteItemButton editButton flex' onClick={deleteFunction}>
         <img src={DeleteButton} alt=""/>
         <span>Smazat</span>
         </div>

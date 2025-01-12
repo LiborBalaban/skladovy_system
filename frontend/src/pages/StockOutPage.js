@@ -7,6 +7,7 @@ import AutoCompleteInput from '../components/inputs/AutoCompleteInput';
 import useData from '../hooks/loadData';
 import StockForm from '../components/forms/StockForm';
 import { postData } from '../hooks/addToDb';
+import List from '../components/List';
 
 const StockOutPage = () => {
     const [products, setProducts] = useState([]); // Pole produktů s ID, množstvím a cenou
@@ -14,7 +15,12 @@ const StockOutPage = () => {
 
     const today = new Date();
     const formattedDate = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
-
+    const HeaderTitles = [
+        {name:'Název'},
+        {name:'Kód'},
+        {name:'Množství: ks'},
+        {name:'Cena: Kč'},
+      ]
     // Přidání nebo aktualizace produktu v seznamu
     const getId = (productId) => {
         setProducts((prevProducts) => {
@@ -80,16 +86,7 @@ const StockOutPage = () => {
                     <AutoCompleteInput data={all_products} onClick={getId} />
                     
                     <h2>Vybrané produkty: {products.length}</h2>
-                    {selectedProducts.map((product) => (
-                        <StockProduct
-                            key={product.id}
-                            id = {product.id}
-                            name={product.name}
-                            code={product.code}
-                            handlePice={updatePrice}
-                            handleQuantity={updateQunatity}
-                        />
-                    ))}
+                    <List type={'stock'} data={selectedProducts} titles={HeaderTitles} handlePice={updatePrice} handleQuantity={updateQunatity}/>
                 </div>
                 <StockForm products={products} onSubmit={handleStock}/>
             </div>

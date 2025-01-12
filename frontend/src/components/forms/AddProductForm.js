@@ -22,7 +22,7 @@ const AddProductForm = ({onSubmit, data}) => {
                       setFormData({
                         productName: data.name,
                         productDescription: data.description,
-                        productQuantity: data.quantity,
+                        productQuantity: data.totalStock,
                         productCategoryId: data.categoryId,
                         productStorageId: data.storageId,
                         productCode: data.code,

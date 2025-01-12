@@ -150,22 +150,48 @@ exports.getProductsByStorage = async (req, res) => {
         });
     }
 };
-exports.getProductDetail= async(req, res) => {
+
+exports.getProductDetail = async (req, res) => {
     const productId = req.params.productId;
+    let storageId;
+    const storage_params_Id = req.params.storageId ? parseInt(req.params.storageId) : null; 
+    const user_storageId = req.user.storageId;
+
+    if(storage_params_Id){
+        storageId = storage_params_Id;
+    }
+    if(user_storageId){
+        storageId = user_storageId;
+    }
     try {
         const product = await prisma.product.findUnique({
             where: {
-             id:parseInt(productId)
+                id: parseInt(productId)
             },
-          });
-         
+            include: {
+                stocks: storageId
+                    ? {
+                          where: {
+                              storageId: storageId
+                          }
+                      }
+                    : true,
+            }
+        });
+
         if (!product) {
             return res.status(404).json({ message: "Produkt nebyl nalezen." });
         }
-        
+
+        // Pokud existuje `storageId`, sečti množství skladů pouze pro tento sklad
+        const totalStock = product.stocks.reduce((sum, stock) => sum + stock.quantity, 0);
+
         return res.json({
             message: "Úspěšně se nám podařilo získat produkt",
-            documents: product
+            documents: {
+                ...product, // Vrátí všechny detaily o produktu
+                totalStock // Přidá součet skladových množství
+            }
         });
     } catch (error) {
         console.error("Chyba při získávání produktu:", error);

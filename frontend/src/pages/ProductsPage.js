@@ -11,12 +11,13 @@ import { useUser } from '../context/UserContext';
 import Input from '../components/inputs/input';
 import List from '../components/List';
 import Header from '../components/Header';
+import useDeleteData from '../hooks/deleteFunction';
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
   const [storageId, setStorageId] = useState('');
   const { role } = useUser();
-
+  const {deleteData} = useDeleteData();
 
   const { goTo } = useCustomNavigate();
   const { data: storages } = useData('http://localhost:5000/get-warehouses');
@@ -53,6 +54,19 @@ const ProductPage = () => {
     setStorageId(selectedId);
   };
 
+  const handleDelete = async (url) => {
+    const confirmed = window.confirm("Opravdu chcete smazat tento záznam?");
+    if (confirmed) {
+      try {
+        await deleteData(url);
+      } catch (err) {
+        console.error('Chyba při mazání:', err);
+      }
+    } else {
+      console.log("Mazání zrušeno");
+    }
+  };
+
   const HeaderTitles = [
     {name:'Název'},
     {name:'Kategorie'},
@@ -75,7 +89,7 @@ const ProductPage = () => {
 
       
       <Header data={products} getFiltred={hadnleFilteredData} label={'Vyhledat produkt'} selectData={storages} getSelectId={handleSelectId}/>
-      <List data={filtredProducts} type={'products'} titles={HeaderTitles}/>
+      <List data={filtredProducts} type={'products'} titles={HeaderTitles} deleteFunction={handleDelete}/>
     </div>
   );
 };

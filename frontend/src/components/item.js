@@ -3,7 +3,7 @@ import DeleteButton from '../Images/delete.png';
 import EditButton from '../Images/edit.png';
 import { Link } from 'react-router-dom';
 import Input from './inputs/input';
-const Item = ({name, link, deleteFunction, info}) => {
+const Item = ({name, link, info, deleteFunction}) => {
   return (
     <div className="item">
       <div className='flex itemContainer'>

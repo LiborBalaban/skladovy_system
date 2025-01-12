@@ -11,7 +11,6 @@ router.get('/get-searched-products', authMiddleware.AuthUser, productController.
 router.get('/get-storage-products/:storageId', authMiddleware.AuthAdmin, productController.getProductsByStorage);
 router.get('/get-storage-products', authMiddleware.AuthUser, productController.getProductsByStorage);
 router.get('/get-product/:productId', authMiddleware.AuthUser, productController.getProductDetail);
-//router.get('/get-category/:categoryId', authMiddleware.AuthAdmin, categoryController.getCategoryDetail);
-//router.delete('/delete-category/:categoryId', authMiddleware.AuthAdmin, categoryController.deleteCategory);
+router.delete('/delete-product/:product', authMiddleware.AuthAdmin, productController.deleteProduct);
 
 module.exports = router;

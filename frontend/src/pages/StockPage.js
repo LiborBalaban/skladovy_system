@@ -7,6 +7,7 @@ import useData from '../hooks/loadData';
 import StockForm from '../components/forms/StockForm';
 import { postData } from '../hooks/addToDb';
 import Button from '../components/button';
+import List from '../components/List';
 
 const StockPage = () => {
     const [products, setProducts] = useState([]); // Pole produktů s ID, množstvím a cenou
@@ -14,6 +15,13 @@ const StockPage = () => {
 
     const today = new Date();
     const formattedDate = `${today.getDate()}.${today.getMonth() + 1}.${today.getFullYear()}`;
+
+    const HeaderTitles = [
+        {name:'Název'},
+        {name:'Kód'},
+        {name:'Množství: ks'},
+        {name:'Cena: Kč'},
+      ]
 
     // Přidání nebo aktualizace produktu v seznamu
     const getId = (productId) => {
@@ -80,18 +88,9 @@ const StockPage = () => {
                     </div>
                     
                     <h2>Vybrané produkty: {products.length}</h2>
-                    {selectedProducts.map((product) => (
-                        <StockProduct
-                            key={product.id}
-                            id = {product.id}
-                            name={product.name}
-                            code={product.code}
-                            handlePice={updatePrice}
-                            handleQuantity={updateQunatity}
-                        />
-                    ))}
+                    <List type={'stock'} data={selectedProducts} titles={HeaderTitles} handlePice={updatePrice} handleQuantity={updateQunatity}/>
                 </div>
-                <StockForm products={products} onSubmit={handleStock}/>
+                <StockForm products={products} onSubmit={handleStock} />
             </div>
         </div>
     );
